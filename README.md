@@ -1,4 +1,3 @@
-```markdown
 # RulesApp — Baseball Rule Research (Canada / Québec / Régional)
 
 RulesApp is a bilingual (FR/EN) web application that helps players, coaches, and umpires **search and reference baseball rules** from three sources:
@@ -8,6 +7,7 @@ RulesApp is a bilingual (FR/EN) web application that helps players, coaches, and
 - **Regional association** supplemental rules (FR only, varies per association)
 
 The app enforces **precedence** and **grounding**:
+
 - Regional can override Québec/Canada
 - Québec can override Canada
 - The app **must not** answer outside the uploaded rulebooks
@@ -49,8 +49,6 @@ AGENTS.md
 ## High-Level Architecture
 
 ```
-
-```
        +---------------------------+
        |      RulesApp.Web         |
        |   Blazor WASM (Public)    |
@@ -86,7 +84,7 @@ AGENTS.md
 | (strict citations only)   |
 +---------------------------+
 
-````
+```
 
 ---
 
@@ -186,19 +184,19 @@ By default, the Web app calls `/api/*` endpoints. For local dev, configure the W
 
 ### Storage (required early)
 
-* `Storage:ConnectionString`
+- `Storage:ConnectionString`
 
 ### Azure AI Search (required for Milestone 4+)
 
-* `Search:Endpoint`
-* `Search:ApiKey`
-* `Search:IndexName`
+- `Search:Endpoint`
+- `Search:ApiKey`
+- `Search:IndexName`
 
 ### Azure OpenAI (required for chat milestone)
 
-* `OpenAI:Endpoint`
-* `OpenAI:ApiKey`
-* `OpenAI:Deployment`
+- `OpenAI:Endpoint`
+- `OpenAI:ApiKey`
+- `OpenAI:Deployment`
 
 ---
 
@@ -206,11 +204,11 @@ By default, the Web app calls `/api/*` endpoints. For local dev, configure the W
 
 Admin-only actions:
 
-* upload PDFs
-* start ingestion/index build
-* view chunk debug pages
-* review override proposals (confirm/reject)
-* publish season (later)
+- upload PDFs
+- start ingestion/index build
+- view chunk debug pages
+- review override proposals (confirm/reject)
+- publish season (later)
 
 > Auth strategy depends on your deployment choice (SWA auth roles or external auth). During early milestones, you may stub admin auth locally.
 
@@ -232,10 +230,10 @@ ingest/{jobId}/chunks.json
 
 ### Tables (recommended)
 
-* `SeasonState` — active season pointer
-* `Associations` — list of associations
-* `IngestionJobs` — ingestion status per association/docType
-* `OverrideMappings` — proposed/confirmed overrides
+- `SeasonState` — active season pointer
+- `Associations` — list of associations
+- `IngestionJobs` — ingestion status per association/docType
+- `OverrideMappings` — proposed/confirmed overrides
 
 ---
 
@@ -243,19 +241,19 @@ ingest/{jobId}/chunks.json
 
 Use the test set in `docs/domain.md` to track:
 
-* “correct rule in top 3?”
-* citations correct?
-* not_found when appropriate?
-* override precedence behavior correct?
+- “correct rule in top 3?”
+- citations correct?
+- not_found when appropriate?
+- override precedence behavior correct?
 
 A simple approach:
 
-* keep a spreadsheet and log results after each tuning iteration
-* add an Admin “Test Console” page later to visualize:
+- keep a spreadsheet and log results after each tuning iteration
+- add an Admin “Test Console” page later to visualize:
 
-  * raw hits
-  * effective hits (after precedence)
-  * citations used
+  - raw hits
+  - effective hits (after precedence)
+  - citations used
 
 ---
 
@@ -263,7 +261,7 @@ A simple approach:
 
 If you use AI coding agents, read:
 
-* `AGENTS.md` — project boundaries, allowed actions, conventions
+- `AGENTS.md` — project boundaries, allowed actions, conventions
 
 ---
 
