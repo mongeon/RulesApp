@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/docs/">
+    <File Path="docs/domain.md" />
+    <File Path="docs/Ingestion.md" />
+    <File Path="docs/search.md" />
+  </Folder>
+  <Folder Name="/Files/">
+    <File Path=".editorconfig" />
+    <File Path="Agents.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="src/RulesApp.Api/RulesApp.Api.csproj" />
+  <Project Path="src/RulesApp.Shared/RulesApp.Shared.csproj" />
+  <Project Path="src/RulesApp.Web/RulesApp.Web.csproj" />
+</Solution>
