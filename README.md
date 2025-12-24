@@ -18,17 +18,15 @@ The app enforces **precedence** and **grounding**:
 ## Repository Structure
 
 ```
-
 /src
-/RulesApp.Shared   # DTOs, enums, shared logic (net10.0)
-/RulesApp.Api      # Azure Functions (.NET isolated) APIs + ingestion workers (net10.0)
-/RulesApp.Web      # Blazor WebAssembly UI (net10.0)
+  /RulesApp.Shared   # DTOs, enums, shared logic (net10.0)
+  /RulesApp.Api      # Azure Functions (.NET isolated) APIs + ingestion workers (net10.0)
+  /RulesApp.Web      # Blazor WebAssembly UI (net10.0)
 /docs
-domain.md
-ingestion.md
-search.md
+  domain.md
+  ingestion.md
+  search.md
 AGENTS.md
-
 ```
 
 ---
@@ -68,8 +66,6 @@ AGENTS.md
         +-----------+-------------------------------+
         |                                           |
         v                                           v
-```
-
 +---------------------------+              +---------------------------+
 |     Azure Storage         |              |      Azure AI Search      |
 |  - Blob: PDFs + artifacts |              |  - rules-active index     |
@@ -77,13 +73,12 @@ AGENTS.md
 |  - Tables: metadata       |              +---------------------------+
 +---------------------------+
 
-(Optional later)
-+---------------------------+
-|       Azure OpenAI        |
-|   RAG answer generation   |
-| (strict citations only)   |
-+---------------------------+
-
+                            (Optional later)
+                   +---------------------------+
+                   |       Azure OpenAI        |
+                   |   RAG answer generation   |
+                   | (strict citations only)   |
+                   +---------------------------+
 ```
 
 ---
