@@ -1,0 +1,1143 @@
+Resolving worker runtime to 'dotnet-isolated'.
+'local.settings.json' found in root directory (C:\Users\gabri\source\repos\mongeon\RulesApp\RulesApp\src\RulesApp.Api).
+  Identification des projets ├á restaurer...
+  Tous les projets sont ├á jour pour la restauration.
+  RulesApp.Shared -> C:\Users\gabri\source\repos\mongeon\RulesApp\RulesApp\src\RulesApp.Api\bin\output\RulesApp.Shared.dll
+  Identification des projets ├á restaurer...
+  Tous les projets sont ├á jour pour la restauration.
+  WorkerExtensions -> C:\Users\gabri\source\repos\mongeon\RulesApp\RulesApp\src\RulesApp.Api\obj\Debug\net10.0\WorkerExtensions\bin\Release\net8.0\Microsoft.Azure.Functions.Worker.Extensions.dll
+  RulesApp.Api -> C:\Users\gabri\source\repos\mongeon\RulesApp\RulesApp\src\RulesApp.Api\bin\output\RulesApp.Api.dll
+
+La g├®n├®ration a r├®ussi.
+    0 Avertissement(s)
+    0 Erreur(s)
+
+Temps ├®coul├® 00:00:03.74
+
+
+
+
+Azure Functions Core Tools
+Core Tools Version:       4.6.0+ab90faafcab539d63cd3d0ce5faf1bca4395fccc (64-bit)
+Function Runtime Version: 4.1045.200.25556
+
+[2025-12-26T20:22:22.834Z] Found C:\Users\gabri\source\repos\mongeon\RulesApp\RulesApp\src\RulesApp.Api\RulesApp.Api.csproj. Using for user secrets file configuration.
+Skipping 'FUNCTIONS_WORKER_RUNTIME' from local settings as it's already defined in current environment variables.
+[2025-12-26T20:22:23.060Z] Building host: version spec: , startup suppressed: 'False', configuration suppressed: 'False', startup operation id: '4d79d9ca-ca03-416f-87a6-25fbf9945f4c'
+[2025-12-26T20:22:23.065Z] Reading host configuration file 'C:\Users\gabri\source\repos\mongeon\RulesApp\RulesApp\src\RulesApp.Api\bin\output\host.json'
+[2025-12-26T20:22:23.066Z] Host configuration file read:
+[2025-12-26T20:22:23.066Z] {
+[2025-12-26T20:22:23.066Z]   "version": "2.0",
+[2025-12-26T20:22:23.067Z]   "logging": {
+[2025-12-26T20:22:23.067Z]     "logLevel": {
+[2025-12-26T20:22:23.068Z]       "default": "Information",
+[2025-12-26T20:22:23.068Z]       "Function": "Information",
+[2025-12-26T20:22:23.069Z]       "Host.Triggers.Queue": "Debug"
+[2025-12-26T20:22:23.069Z]     },
+[2025-12-26T20:22:23.070Z]     "applicationInsights": {
+[2025-12-26T20:22:23.070Z]       "samplingSettings": {
+[2025-12-26T20:22:23.071Z]         "isEnabled": true,
+[2025-12-26T20:22:23.071Z]         "excludedTypes": "Request"
+[2025-12-26T20:22:23.072Z]       },
+[2025-12-26T20:22:23.072Z]       "enableLiveMetricsFilters": true
+[2025-12-26T20:22:23.073Z]     }
+[2025-12-26T20:22:23.073Z]   },
+[2025-12-26T20:22:23.073Z]   "extensions": {
+[2025-12-26T20:22:23.074Z]     "http": {
+[2025-12-26T20:22:23.074Z]       "routePrefix": ""
+[2025-12-26T20:22:23.074Z]     },
+[2025-12-26T20:22:23.075Z]     "queues": {
+[2025-12-26T20:22:23.075Z]       "batchSize": 1,
+[2025-12-26T20:22:23.076Z]       "newBatchThreshold": 0,
+[2025-12-26T20:22:23.076Z]       "maxDequeueCount": 5,
+[2025-12-26T20:22:23.076Z]       "maxPollingInterval": "00:00:02",
+[2025-12-26T20:22:23.077Z]       "visibilityTimeout": "00:05:00"
+[2025-12-26T20:22:23.077Z]     }
+[2025-12-26T20:22:23.077Z]   }
+[2025-12-26T20:22:23.078Z] }
+[2025-12-26T20:22:23.094Z] Extension Bundle not loaded. Loading extensions from C:\Users\gabri\source\repos\mongeon\RulesApp\RulesApp\src\RulesApp.Api\bin\output. BundleConfigured: False, PrecompiledFunctionApp: False, LegacyBundle: False, DotnetIsolatedApp: True, isLogicApp: False
+[2025-12-26T20:22:23.095Z] Script Startup resetting load context with base path: 'C:\Users\gabri\source\repos\mongeon\RulesApp\RulesApp\src\RulesApp.Api\bin\output\.azurefunctions'.
+[2025-12-26T20:22:23.100Z] Loading startup extension 'AzureStorageQueues'
+[2025-12-26T20:22:23.137Z] Loaded extension 'AzureStorageQueues' (5.3.1.0)
+[2025-12-26T20:22:23.143Z] Loading startup extension 'Startup'
+[2025-12-26T20:22:23.193Z] Loaded extension 'Startup' (1.0.0.0)
+[2025-12-26T20:22:23.206Z] Reading host configuration file 'C:\Users\gabri\source\repos\mongeon\RulesApp\RulesApp\src\RulesApp.Api\bin\output\host.json'
+[2025-12-26T20:22:23.206Z] Host configuration file read:
+[2025-12-26T20:22:23.207Z] {
+[2025-12-26T20:22:23.207Z]   "version": "2.0",
+[2025-12-26T20:22:23.207Z]   "logging": {
+[2025-12-26T20:22:23.208Z]     "logLevel": {
+[2025-12-26T20:22:23.208Z]       "default": "Information",
+[2025-12-26T20:22:23.208Z]       "Function": "Information",
+[2025-12-26T20:22:23.209Z]       "Host.Triggers.Queue": "Debug"
+[2025-12-26T20:22:23.209Z]     },
+[2025-12-26T20:22:23.209Z]     "applicationInsights": {
+[2025-12-26T20:22:23.210Z]       "samplingSettings": {
+[2025-12-26T20:22:23.210Z]         "isEnabled": true,
+[2025-12-26T20:22:23.210Z]         "excludedTypes": "Request"
+[2025-12-26T20:22:23.211Z]       },
+[2025-12-26T20:22:23.211Z]       "enableLiveMetricsFilters": true
+[2025-12-26T20:22:23.211Z]     }
+[2025-12-26T20:22:23.211Z]   },
+[2025-12-26T20:22:23.212Z]   "extensions": {
+[2025-12-26T20:22:23.212Z]     "http": {
+[2025-12-26T20:22:23.212Z]       "routePrefix": ""
+[2025-12-26T20:22:23.213Z]     },
+[2025-12-26T20:22:23.213Z]     "queues": {
+[2025-12-26T20:22:23.213Z]       "batchSize": 1,
+[2025-12-26T20:22:23.213Z]       "newBatchThreshold": 0,
+[2025-12-26T20:22:23.214Z]       "maxDequeueCount": 5,
+[2025-12-26T20:22:23.214Z]       "maxPollingInterval": "00:00:02",
+[2025-12-26T20:22:23.214Z]       "visibilityTimeout": "00:05:00"
+[2025-12-26T20:22:23.215Z]     }
+[2025-12-26T20:22:23.215Z]   }
+[2025-12-26T20:22:23.215Z] }
+[2025-12-26T20:22:23.250Z] Starting host metrics provider.
+[2025-12-26T20:22:23.333Z] Initializing Warmup Extension.
+[2025-12-26T20:22:23.357Z] Initializing Host. OperationId: '4d79d9ca-ca03-416f-87a6-25fbf9945f4c'.
+[2025-12-26T20:22:23.361Z] Host initialization: ConsecutiveErrors=0, StartupCount=1, OperationId=4d79d9ca-ca03-416f-87a6-25fbf9945f4c
+[2025-12-26T20:22:23.378Z] Loading functions metadata
+[2025-12-26T20:22:23.379Z] Worker indexing is enabled
+[2025-12-26T20:22:23.381Z] Fetching metadata for workerRuntime: dotnet-isolated
+[2025-12-26T20:22:23.381Z] Reading functions metadata (Worker)
+[2025-12-26T20:22:23.847Z] {
+[2025-12-26T20:22:23.848Z]   "ProcessId": 50364,
+[2025-12-26T20:22:23.848Z]   "RuntimeIdentifier": "win-x64",
+[2025-12-26T20:22:23.848Z]   "WorkerVersion": "2.51.0.0",
+[2025-12-26T20:22:23.848Z]   "ProductVersion": "2.51.0\u002B456cca3aa0f0f42db5f21f8ed7a1277278b6eb2a",
+[2025-12-26T20:22:23.849Z]   "FrameworkDescription": ".NET 10.0.1",
+[2025-12-26T20:22:23.849Z]   "OSDescription": "Microsoft Windows 10.0.26200",
+[2025-12-26T20:22:23.849Z]   "OSArchitecture": "X64",
+[2025-12-26T20:22:23.849Z]   "CommandLine": "C:\\Users\\gabri\\source\\repos\\mongeon\\RulesApp\\RulesApp\\src\\RulesApp.Api\\bin\\output\\RulesApp.Api.dll --host 127.0.0.1 --port 58328 --workerId f88d63c9-95c0-4c13-b190-3f6d58fe6c2a --requestId 7a4bcea4-e7be-488f-9c8c-5d66657dcd1b --grpcMaxMessageLength 2147483647 --functions-uri http://127.0.0.1:58328/ --functions-worker-id f88d63c9-95c0-4c13-b190-3f6d58fe6c2a --functions-request-id 7a4bcea4-e7be-488f-9c8c-5d66657dcd1b --functions-grpc-max-message-length 2147483647"
+[2025-12-26T20:22:23.850Z] }
+[2025-12-26T20:22:23.947Z] 12 functions found (Worker)
+[2025-12-26T20:22:23.952Z] Reading functions metadata (Custom)
+[2025-12-26T20:22:23.957Z] 0 functions found (Custom)
+[2025-12-26T20:22:23.962Z] 12 functions loaded
+[2025-12-26T20:22:23.965Z] LoggerFilterOptions
+[2025-12-26T20:22:23.965Z] {
+[2025-12-26T20:22:23.965Z]   "MinLevel": "None",
+[2025-12-26T20:22:23.966Z]   "Rules": [
+[2025-12-26T20:22:23.966Z]     {
+[2025-12-26T20:22:23.966Z]       "ProviderName": null,
+[2025-12-26T20:22:23.966Z]       "CategoryName": "Microsoft.Hosting.Lifetime",
+[2025-12-26T20:22:23.967Z]       "LogLevel": "None",
+[2025-12-26T20:22:23.967Z]       "Filter": null
+[2025-12-26T20:22:23.967Z]     },
+[2025-12-26T20:22:23.968Z]     {
+[2025-12-26T20:22:23.968Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-12-26T20:22:23.968Z]       "CategoryName": null,
+[2025-12-26T20:22:23.968Z]       "LogLevel": "None",
+[2025-12-26T20:22:23.969Z]       "Filter": null
+[2025-12-26T20:22:23.969Z]     },
+[2025-12-26T20:22:23.969Z]     {
+[2025-12-26T20:22:23.969Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-12-26T20:22:23.970Z]       "CategoryName": null,
+[2025-12-26T20:22:23.970Z]       "LogLevel": null,
+[2025-12-26T20:22:23.970Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:23.971Z]     },
+[2025-12-26T20:22:23.971Z]     {
+[2025-12-26T20:22:23.971Z]       "ProviderName": null,
+[2025-12-26T20:22:23.971Z]       "CategoryName": null,
+[2025-12-26T20:22:23.972Z]       "LogLevel": null,
+[2025-12-26T20:22:23.972Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:23.972Z]     },
+[2025-12-26T20:22:23.973Z]     {
+[2025-12-26T20:22:23.974Z]       "ProviderName": null,
+[2025-12-26T20:22:23.974Z]       "CategoryName": null,
+[2025-12-26T20:22:23.974Z]       "LogLevel": null,
+[2025-12-26T20:22:23.975Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:23.975Z]     },
+[2025-12-26T20:22:23.975Z]     {
+[2025-12-26T20:22:23.975Z]       "ProviderName": null,
+[2025-12-26T20:22:23.976Z]       "CategoryName": "Host.Triggers.Queue",
+[2025-12-26T20:22:23.976Z]       "LogLevel": "Debug",
+[2025-12-26T20:22:23.976Z]       "Filter": null
+[2025-12-26T20:22:23.977Z]     },
+[2025-12-26T20:22:23.977Z]     {
+[2025-12-26T20:22:23.977Z]       "ProviderName": null,
+[2025-12-26T20:22:23.977Z]       "CategoryName": "Function",
+[2025-12-26T20:22:23.977Z]       "LogLevel": "Information",
+[2025-12-26T20:22:23.978Z]       "Filter": null
+[2025-12-26T20:22:23.978Z]     },
+[2025-12-26T20:22:23.978Z]     {
+[2025-12-26T20:22:23.978Z]       "ProviderName": null,
+[2025-12-26T20:22:23.979Z]       "CategoryName": null,
+[2025-12-26T20:22:23.979Z]       "LogLevel": "Information",
+[2025-12-26T20:22:23.979Z]       "Filter": null
+[2025-12-26T20:22:23.979Z]     },
+[2025-12-26T20:22:23.980Z]     {
+[2025-12-26T20:22:23.980Z]       "ProviderName": "Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider",
+[2025-12-26T20:22:23.980Z]       "CategoryName": null,
+[2025-12-26T20:22:23.980Z]       "LogLevel": "None",
+[2025-12-26T20:22:23.981Z]       "Filter": null
+[2025-12-26T20:22:23.981Z]     },
+[2025-12-26T20:22:23.981Z]     {
+[2025-12-26T20:22:23.981Z]       "ProviderName": "Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider",
+[2025-12-26T20:22:23.982Z]       "CategoryName": null,
+[2025-12-26T20:22:23.982Z]       "LogLevel": null,
+[2025-12-26T20:22:23.982Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:23.983Z]     },
+[2025-12-26T20:22:23.983Z]     {
+[2025-12-26T20:22:23.983Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-12-26T20:22:23.984Z]       "CategoryName": null,
+[2025-12-26T20:22:23.984Z]       "LogLevel": null,
+[2025-12-26T20:22:23.984Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:23.984Z]     }
+[2025-12-26T20:22:23.985Z]   ]
+[2025-12-26T20:22:23.985Z] }
+[2025-12-26T20:22:23.985Z] LoggerFilterOptions
+[2025-12-26T20:22:23.986Z] {
+[2025-12-26T20:22:23.986Z]   "MinLevel": "None",
+[2025-12-26T20:22:23.986Z]   "Rules": [
+[2025-12-26T20:22:23.986Z]     {
+[2025-12-26T20:22:23.987Z]       "ProviderName": null,
+[2025-12-26T20:22:23.987Z]       "CategoryName": "Microsoft.Hosting.Lifetime",
+[2025-12-26T20:22:23.988Z]       "LogLevel": "None",
+[2025-12-26T20:22:23.988Z]       "Filter": null
+[2025-12-26T20:22:23.988Z]     },
+[2025-12-26T20:22:23.988Z]     {
+[2025-12-26T20:22:23.989Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-12-26T20:22:23.989Z]       "CategoryName": null,
+[2025-12-26T20:22:23.990Z]       "LogLevel": "None",
+[2025-12-26T20:22:23.990Z]       "Filter": null
+[2025-12-26T20:22:23.990Z]     },
+[2025-12-26T20:22:23.990Z]     {
+[2025-12-26T20:22:23.991Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-12-26T20:22:23.991Z]       "CategoryName": null,
+[2025-12-26T20:22:23.991Z]       "LogLevel": null,
+[2025-12-26T20:22:23.991Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:23.992Z]     },
+[2025-12-26T20:22:23.992Z]     {
+[2025-12-26T20:22:23.992Z]       "ProviderName": null,
+[2025-12-26T20:22:23.993Z]       "CategoryName": null,
+[2025-12-26T20:22:23.993Z]       "LogLevel": null,
+[2025-12-26T20:22:23.993Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:23.993Z]     },
+[2025-12-26T20:22:23.994Z]     {
+[2025-12-26T20:22:23.994Z]       "ProviderName": null,
+[2025-12-26T20:22:23.994Z]       "CategoryName": null,
+[2025-12-26T20:22:23.995Z]       "LogLevel": null,
+[2025-12-26T20:22:23.995Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:23.995Z]     },
+[2025-12-26T20:22:23.995Z]     {
+[2025-12-26T20:22:23.996Z]       "ProviderName": null,
+[2025-12-26T20:22:23.996Z]       "CategoryName": "Host.Triggers.Queue",
+[2025-12-26T20:22:23.996Z]       "LogLevel": "Debug",
+[2025-12-26T20:22:23.996Z]       "Filter": null
+[2025-12-26T20:22:23.997Z]     },
+[2025-12-26T20:22:23.997Z]     {
+[2025-12-26T20:22:23.997Z]       "ProviderName": null,
+[2025-12-26T20:22:23.998Z]       "CategoryName": "Function",
+[2025-12-26T20:22:23.998Z]       "LogLevel": "Information",
+[2025-12-26T20:22:23.998Z]       "Filter": null
+[2025-12-26T20:22:23.999Z]     },
+[2025-12-26T20:22:23.999Z]     {
+[2025-12-26T20:22:23.999Z]       "ProviderName": null,
+[2025-12-26T20:22:23.999Z]       "CategoryName": null,
+[2025-12-26T20:22:24.000Z]       "LogLevel": "Information",
+[2025-12-26T20:22:24.000Z]       "Filter": null
+[2025-12-26T20:22:24.000Z]     },
+[2025-12-26T20:22:24.000Z]     {
+[2025-12-26T20:22:24.001Z]       "ProviderName": "Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider",
+[2025-12-26T20:22:24.001Z]       "CategoryName": null,
+[2025-12-26T20:22:24.001Z]       "LogLevel": "None",
+[2025-12-26T20:22:24.001Z]       "Filter": null
+[2025-12-26T20:22:24.002Z]     },
+[2025-12-26T20:22:24.002Z]     {
+[2025-12-26T20:22:24.002Z]       "ProviderName": "Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider",
+[2025-12-26T20:22:24.003Z]       "CategoryName": null,
+[2025-12-26T20:22:24.003Z]       "LogLevel": null,
+[2025-12-26T20:22:24.003Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:24.003Z]     },
+[2025-12-26T20:22:24.004Z]     {
+[2025-12-26T20:22:24.004Z]       "ProviderName": "Azure.Functions.Cli.Diagnostics.ColoredConsoleLoggerProvider",
+[2025-12-26T20:22:24.004Z]       "CategoryName": null,
+[2025-12-26T20:22:24.004Z]       "LogLevel": null,
+[2025-12-26T20:22:24.005Z]       "Filter": "<AddFilter>b__0"
+[2025-12-26T20:22:24.005Z]     }
+[2025-12-26T20:22:24.005Z]   ]
+[2025-12-26T20:22:24.006Z] }
+[2025-12-26T20:22:24.006Z] HttpWorkerOptions
+[2025-12-26T20:22:24.006Z] {
+[2025-12-26T20:22:24.007Z]   "Type": 0,
+[2025-12-26T20:22:24.007Z]   "Description": null,
+[2025-12-26T20:22:24.007Z]   "Arguments": null,
+[2025-12-26T20:22:24.008Z]   "Port": 58329,
+[2025-12-26T20:22:24.008Z]   "IsPortManuallySet": false,
+[2025-12-26T20:22:24.008Z]   "EnableForwardingHttpRequest": false,
+[2025-12-26T20:22:24.008Z]   "EnableProxyingHttpRequest": false,
+[2025-12-26T20:22:24.009Z]   "InitializationTimeout": "00:00:30",
+[2025-12-26T20:22:24.009Z]   "CustomRoutesEnabled": false,
+[2025-12-26T20:22:24.009Z]   "Http": null
+[2025-12-26T20:22:24.010Z] }
+[2025-12-26T20:22:24.010Z] FunctionResultAggregatorOptions
+[2025-12-26T20:22:24.010Z] {
+[2025-12-26T20:22:24.011Z]   "BatchSize": 1000,
+[2025-12-26T20:22:24.011Z]   "FlushTimeout": "00:00:30",
+[2025-12-26T20:22:24.011Z]   "IsEnabled": true
+[2025-12-26T20:22:24.011Z] }
+[2025-12-26T20:22:24.012Z] ConcurrencyOptions
+[2025-12-26T20:22:24.012Z] {
+[2025-12-26T20:22:24.012Z]   "DynamicConcurrencyEnabled": false,
+[2025-12-26T20:22:24.013Z]   "MaximumFunctionConcurrency": 500,
+[2025-12-26T20:22:24.013Z]   "CPUThreshold": 0.8,
+[2025-12-26T20:22:24.013Z]   "SnapshotPersistenceEnabled": true
+[2025-12-26T20:22:24.013Z] }
+[2025-12-26T20:22:24.014Z] QueuesOptions
+[2025-12-26T20:22:24.014Z] {
+[2025-12-26T20:22:24.014Z]   "BatchSize": 1,
+[2025-12-26T20:22:24.014Z]   "NewBatchThreshold": 0,
+[2025-12-26T20:22:24.015Z]   "MaxPollingInterval": "00:00:02",
+[2025-12-26T20:22:24.015Z]   "MaxDequeueCount": 5,
+[2025-12-26T20:22:24.015Z]   "VisibilityTimeout": "00:05:00",
+[2025-12-26T20:22:24.016Z]   "MessageEncoding": "Base64"
+[2025-12-26T20:22:24.016Z] }
+[2025-12-26T20:22:24.016Z] SingletonOptions
+[2025-12-26T20:22:24.016Z] {
+[2025-12-26T20:22:24.017Z]   "LockPeriod": "00:00:15",
+[2025-12-26T20:22:24.017Z]   "ListenerLockPeriod": "00:00:15",
+[2025-12-26T20:22:24.017Z]   "LockAcquisitionTimeout": "10675199.02:48:05.4775807",
+[2025-12-26T20:22:24.018Z]   "LockAcquisitionPollingInterval": "00:00:05",
+[2025-12-26T20:22:24.018Z]   "ListenerLockRecoveryPollingInterval": "00:01:00"
+[2025-12-26T20:22:24.018Z] }
+[2025-12-26T20:22:24.019Z] ScaleOptions
+[2025-12-26T20:22:24.019Z] {
+[2025-12-26T20:22:24.019Z]   "ScaleMetricsMaxAge": "00:02:00",
+[2025-12-26T20:22:24.019Z]   "ScaleMetricsSampleInterval": "00:00:10",
+[2025-12-26T20:22:24.020Z]   "MetricsPurgeEnabled": true,
+[2025-12-26T20:22:24.020Z]   "IsTargetScalingEnabled": true,
+[2025-12-26T20:22:24.020Z]   "IsRuntimeScalingEnabled": false
+[2025-12-26T20:22:24.021Z] }
+[2025-12-26T20:22:24.022Z] Starting JobHost
+[2025-12-26T20:22:24.024Z] Starting Host (HostId=fractal1-1397345676, InstanceId=ac71d3e8-babe-4092-8484-484432dfd6f2, Version=4.1045.200.25556, ProcessId=44536, AppDomainId=1, InDebugMode=False, InDiagnosticMode=False, FunctionsExtensionVersion=(null))
+[2025-12-26T20:22:24.046Z] Generating 12 job function(s)
+[2025-12-26T20:22:24.046Z] Worker process started and initialized.
+[2025-12-26T20:22:24.125Z] Found the following functions:
+[2025-12-26T20:22:24.125Z] Host.Functions.AdminBuild
+[2025-12-26T20:22:24.126Z] Host.Functions.AdminDebugChunk
+[2025-12-26T20:22:24.126Z] Host.Functions.AdminDebugChunks
+[2025-12-26T20:22:24.127Z] Host.Functions.AdminDebugInvokeWorker
+[2025-12-26T20:22:24.127Z] Host.Functions.AdminDebugQueueClear
+[2025-12-26T20:22:24.127Z] Host.Functions.AdminDebugQueueGet
+[2025-12-26T20:22:24.128Z] Host.Functions.AdminDebugQueueReceive
+[2025-12-26T20:22:24.128Z] Host.Functions.AdminDebugQueueSend
+[2025-12-26T20:22:24.128Z] Host.Functions.AdminJobsLatest
+[2025-12-26T20:22:24.129Z] Host.Functions.AdminUpload
+[2025-12-26T20:22:24.129Z] Host.Functions.Health
+[2025-12-26T20:22:24.129Z] Host.Functions.RulesIngestWorker
+[2025-12-26T20:22:24.129Z] 
+[2025-12-26T20:22:24.137Z] HttpOptions
+[2025-12-26T20:22:24.137Z] {
+[2025-12-26T20:22:24.138Z]   "DynamicThrottlesEnabled": false,
+[2025-12-26T20:22:24.138Z] Initializing function HTTP routes
+[2025-12-26T20:22:24.138Z]   "EnableChunkedRequestBinding": false,
+[2025-12-26T20:22:24.138Z] Mapped function route '/api/admin/build' [post] to 'AdminBuild'
+[2025-12-26T20:22:24.139Z]   "MaxConcurrentRequests": -1,
+[2025-12-26T20:22:24.139Z] Mapped function route '/api/admin/debug/chunk' [get] to 'AdminDebugChunk'
+[2025-12-26T20:22:24.139Z]   "MaxOutstandingRequests": -1,
+[2025-12-26T20:22:24.140Z] Mapped function route '/api/admin/debug/chunks' [get] to 'AdminDebugChunks'
+[2025-12-26T20:22:24.140Z]   "RoutePrefix": ""
+[2025-12-26T20:22:24.141Z] Mapped function route '/api/admin/debug/invoke-worker' [post] to 'AdminDebugInvokeWorker'
+[2025-12-26T20:22:24.141Z] }
+[2025-12-26T20:22:24.141Z] Mapped function route '/api/admin/debug/queue' [delete] to 'AdminDebugQueueClear'
+[2025-12-26T20:22:24.142Z] Mapped function route '/api/admin/debug/queue' [get] to 'AdminDebugQueueGet'
+[2025-12-26T20:22:24.142Z] Mapped function route '/api/admin/debug/queue/receive' [get] to 'AdminDebugQueueReceive'
+[2025-12-26T20:22:24.142Z] Mapped function route '/api/admin/debug/queue/send' [post] to 'AdminDebugQueueSend'
+[2025-12-26T20:22:24.143Z] Mapped function route '/api/admin/jobs/latest' [get] to 'AdminJobsLatest'
+[2025-12-26T20:22:24.143Z] Mapped function route '/api/admin/upload' [post] to 'AdminUpload'
+[2025-12-26T20:22:24.143Z] Mapped function route '/api/health' [get,post] to 'Health'
+[2025-12-26T20:22:24.144Z] 
+[2025-12-26T20:22:24.147Z] Host initialized (118ms)
+[2025-12-26T20:22:24.150Z] Host started (125ms)
+[2025-12-26T20:22:24.151Z] Job host started
+
+Functions:
+
+	AdminBuild: [POST] http://localhost:7071/api/admin/build
+
+	AdminDebugChunk: [GET] http://localhost:7071/api/admin/debug/chunk
+
+	AdminDebugChunks: [GET] http://localhost:7071/api/admin/debug/chunks
+
+	AdminDebugInvokeWorker: [POST] http://localhost:7071/api/admin/debug/invoke-worker
+
+	AdminDebugQueueClear: [DELETE] http://localhost:7071/api/admin/debug/queue
+
+	AdminDebugQueueGet: [GET] http://localhost:7071/api/admin/debug/queue
+
+	AdminDebugQueueReceive: [GET] http://localhost:7071/api/admin/debug/queue/receive
+
+	AdminDebugQueueSend: [POST] http://localhost:7071/api/admin/debug/queue/send
+
+	AdminJobsLatest: [GET] http://localhost:7071/api/admin/jobs/latest
+
+	AdminUpload: [POST] http://localhost:7071/api/admin/upload
+
+[2025-12-26T20:22:24.173Z] Request [c7da9da9-b47c-4884-8a77-1c437aa04f6b] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest?comp=metadata
+	Health: [GET,POST] http://localhost:7071/api/health
+
+[2025-12-26T20:22:24.174Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:24.175Z] Accept:application/xml
+[2025-12-26T20:22:24.176Z] x-ms-client-request-id:c7da9da9-b47c-4884-8a77-1c437aa04f6b
+[2025-12-26T20:22:24.176Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:24.176Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:24.177Z] x-ms-date:Fri, 26 Dec 2025 20:22:24 GMT
+[2025-12-26T20:22:24.177Z] Authorization:REDACTED
+[2025-12-26T20:22:24.178Z] client assembly: Azure.Storage.Queues
+	RulesIngestWorker: queueTrigger
+
+For detailed output, run func with --verbose flag.
+[2025-12-26T20:22:24.330Z] Response [c7da9da9-b47c-4884-8a77-1c437aa04f6b] 200 OK (00.1s)
+[2025-12-26T20:22:24.330Z] Cache-Control:no-cache
+[2025-12-26T20:22:24.331Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:24.331Z] x-ms-request-id:28a14296-4003-0011-08a5-766254000000
+[2025-12-26T20:22:24.331Z] x-ms-client-request-id:c7da9da9-b47c-4884-8a77-1c437aa04f6b
+[2025-12-26T20:22:24.332Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:24.332Z] x-ms-approximate-messages-count:0
+[2025-12-26T20:22:24.332Z] Date:Fri, 26 Dec 2025 20:22:23 GMT
+[2025-12-26T20:22:24.332Z] Content-Length:0
+[2025-12-26T20:22:24.333Z] 
+[2025-12-26T20:22:24.338Z] Request [c7da9da9-b47c-4884-8a77-1c437aa04f6b] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:24.339Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:24.339Z] Accept:application/xml
+[2025-12-26T20:22:24.340Z] x-ms-client-request-id:c7da9da9-b47c-4884-8a77-1c437aa04f6b
+[2025-12-26T20:22:24.340Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:24.340Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:24.341Z] x-ms-date:Fri, 26 Dec 2025 20:22:24 GMT
+[2025-12-26T20:22:24.341Z] Authorization:REDACTED
+[2025-12-26T20:22:24.341Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:24.373Z] Response [c7da9da9-b47c-4884-8a77-1c437aa04f6b] 200 OK (00.0s)
+[2025-12-26T20:22:24.373Z] Cache-Control:no-cache
+[2025-12-26T20:22:24.373Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:24.374Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:24.374Z] x-ms-request-id:28a142ab-4003-0011-1aa5-766254000000
+[2025-12-26T20:22:24.374Z] x-ms-client-request-id:c7da9da9-b47c-4884-8a77-1c437aa04f6b
+[2025-12-26T20:22:24.375Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:24.375Z] Date:Fri, 26 Dec 2025 20:22:23 GMT
+[2025-12-26T20:22:24.375Z] Content-Type:application/xml
+[2025-12-26T20:22:24.375Z] 
+[2025-12-26T20:22:24.488Z] Request [e42484d3-a5b8-4337-a178-dedfe1f7cc9b] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:24.489Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:24.489Z] Accept:application/xml
+[2025-12-26T20:22:24.490Z] x-ms-client-request-id:e42484d3-a5b8-4337-a178-dedfe1f7cc9b
+[2025-12-26T20:22:24.490Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:24.490Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:24.491Z] x-ms-date:Fri, 26 Dec 2025 20:22:24 GMT
+[2025-12-26T20:22:24.491Z] Authorization:REDACTED
+[2025-12-26T20:22:24.491Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:24.533Z] Response [e42484d3-a5b8-4337-a178-dedfe1f7cc9b] 200 OK (00.0s)
+[2025-12-26T20:22:24.533Z] Cache-Control:no-cache
+[2025-12-26T20:22:24.533Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:24.533Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:24.534Z] x-ms-request-id:28a142d5-4003-0011-3ea5-766254000000
+[2025-12-26T20:22:24.534Z] x-ms-client-request-id:e42484d3-a5b8-4337-a178-dedfe1f7cc9b
+[2025-12-26T20:22:24.534Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:24.535Z] Date:Fri, 26 Dec 2025 20:22:23 GMT
+[2025-12-26T20:22:24.535Z] Content-Type:application/xml
+[2025-12-26T20:22:24.535Z] 
+[2025-12-26T20:22:24.735Z] Request [be62e96b-0340-465c-8e56-aab48e0cd4b5] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:24.735Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:24.736Z] Accept:application/xml
+[2025-12-26T20:22:24.736Z] x-ms-client-request-id:be62e96b-0340-465c-8e56-aab48e0cd4b5
+[2025-12-26T20:22:24.736Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:24.736Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:24.737Z] x-ms-date:Fri, 26 Dec 2025 20:22:24 GMT
+[2025-12-26T20:22:24.737Z] Authorization:REDACTED
+[2025-12-26T20:22:24.738Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:24.805Z] Response [be62e96b-0340-465c-8e56-aab48e0cd4b5] 200 OK (00.1s)
+[2025-12-26T20:22:24.806Z] Cache-Control:no-cache
+[2025-12-26T20:22:24.806Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:24.806Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:24.807Z] x-ms-request-id:28a1434e-4003-0011-2ba5-766254000000
+[2025-12-26T20:22:24.807Z] x-ms-client-request-id:be62e96b-0340-465c-8e56-aab48e0cd4b5
+[2025-12-26T20:22:24.807Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:24.808Z] Date:Fri, 26 Dec 2025 20:22:24 GMT
+[2025-12-26T20:22:24.808Z] Content-Type:application/xml
+[2025-12-26T20:22:24.808Z] 
+[2025-12-26T20:22:25.156Z] Request [8282cdb9-2fdc-40a4-997e-3ff3890029ad] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:25.157Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:25.157Z] Accept:application/xml
+[2025-12-26T20:22:25.158Z] x-ms-client-request-id:8282cdb9-2fdc-40a4-997e-3ff3890029ad
+[2025-12-26T20:22:25.158Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:25.158Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:25.158Z] x-ms-date:Fri, 26 Dec 2025 20:22:25 GMT
+[2025-12-26T20:22:25.159Z] Authorization:REDACTED
+[2025-12-26T20:22:25.159Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:25.194Z] Response [8282cdb9-2fdc-40a4-997e-3ff3890029ad] 200 OK (00.0s)
+[2025-12-26T20:22:25.195Z] Cache-Control:no-cache
+[2025-12-26T20:22:25.195Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:25.196Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:25.196Z] x-ms-request-id:28a1442c-4003-0011-5fa5-766254000000
+[2025-12-26T20:22:25.196Z] x-ms-client-request-id:8282cdb9-2fdc-40a4-997e-3ff3890029ad
+[2025-12-26T20:22:25.197Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:25.197Z] Date:Fri, 26 Dec 2025 20:22:24 GMT
+[2025-12-26T20:22:25.197Z] Content-Type:application/xml
+[2025-12-26T20:22:25.197Z] 
+[2025-12-26T20:22:25.758Z] Request [ae19c73f-3de2-4217-977d-85873db3f461] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:25.758Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:25.759Z] Accept:application/xml
+[2025-12-26T20:22:25.759Z] x-ms-client-request-id:ae19c73f-3de2-4217-977d-85873db3f461
+[2025-12-26T20:22:25.759Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:25.759Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:25.760Z] x-ms-date:Fri, 26 Dec 2025 20:22:25 GMT
+[2025-12-26T20:22:25.760Z] Authorization:REDACTED
+[2025-12-26T20:22:25.760Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:25.796Z] Response [ae19c73f-3de2-4217-977d-85873db3f461] 200 OK (00.0s)
+[2025-12-26T20:22:25.796Z] Cache-Control:no-cache
+[2025-12-26T20:22:25.796Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:25.796Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:25.797Z] x-ms-request-id:28a1454f-4003-0011-57a5-766254000000
+[2025-12-26T20:22:25.797Z] x-ms-client-request-id:ae19c73f-3de2-4217-977d-85873db3f461
+[2025-12-26T20:22:25.797Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:25.797Z] Date:Fri, 26 Dec 2025 20:22:25 GMT
+[2025-12-26T20:22:25.798Z] Content-Type:application/xml
+[2025-12-26T20:22:25.798Z] 
+[2025-12-26T20:22:26.625Z] Request [7f006654-5e52-418b-acb3-c501d850d4d7] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:26.625Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:26.626Z] Accept:application/xml
+[2025-12-26T20:22:26.626Z] x-ms-client-request-id:7f006654-5e52-418b-acb3-c501d850d4d7
+[2025-12-26T20:22:26.626Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:26.626Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:26.627Z] x-ms-date:Fri, 26 Dec 2025 20:22:26 GMT
+[2025-12-26T20:22:26.627Z] Authorization:REDACTED
+[2025-12-26T20:22:26.627Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:26.656Z] Response [7f006654-5e52-418b-acb3-c501d850d4d7] 200 OK (00.0s)
+[2025-12-26T20:22:26.656Z] Cache-Control:no-cache
+[2025-12-26T20:22:26.656Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:26.656Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:26.657Z] x-ms-request-id:28a146a6-4003-0011-64a5-766254000000
+[2025-12-26T20:22:26.657Z] x-ms-client-request-id:7f006654-5e52-418b-acb3-c501d850d4d7
+[2025-12-26T20:22:26.657Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:26.658Z] Date:Fri, 26 Dec 2025 20:22:25 GMT
+[2025-12-26T20:22:26.658Z] Content-Type:application/xml
+[2025-12-26T20:22:26.659Z] 
+[2025-12-26T20:22:28.303Z] Request [7e4e3f2d-c346-4d6a-95fc-081b6e9fce1a] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:28.304Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:28.304Z] Accept:application/xml
+[2025-12-26T20:22:28.304Z] x-ms-client-request-id:7e4e3f2d-c346-4d6a-95fc-081b6e9fce1a
+[2025-12-26T20:22:28.305Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:28.305Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:28.305Z] x-ms-date:Fri, 26 Dec 2025 20:22:28 GMT
+[2025-12-26T20:22:28.306Z] Authorization:REDACTED
+[2025-12-26T20:22:28.306Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:28.332Z] Response [7e4e3f2d-c346-4d6a-95fc-081b6e9fce1a] 200 OK (00.0s)
+[2025-12-26T20:22:28.333Z] Cache-Control:no-cache
+[2025-12-26T20:22:28.333Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:28.334Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:28.334Z] x-ms-request-id:28a148f6-4003-0011-44a5-766254000000
+[2025-12-26T20:22:28.334Z] x-ms-client-request-id:7e4e3f2d-c346-4d6a-95fc-081b6e9fce1a
+[2025-12-26T20:22:28.334Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:28.335Z] Date:Fri, 26 Dec 2025 20:22:27 GMT
+[2025-12-26T20:22:28.335Z] Content-Type:application/xml
+[2025-12-26T20:22:28.335Z] 
+[2025-12-26T20:22:28.992Z] Request [06707ac6-66c4-4e74-acc9-6613982cb8e8] HEAD https://rulesapplocalwqsndf64ts3.blob.core.windows.net/azure-webjobs-hosts/locks/fractal1-1397345676/host
+[2025-12-26T20:22:28.992Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:28.993Z] Accept:application/xml
+[2025-12-26T20:22:28.993Z] x-ms-client-request-id:06707ac6-66c4-4e74-acc9-6613982cb8e8
+[2025-12-26T20:22:28.993Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:28.994Z] User-Agent:azsdk-net-Storage.Blobs/12.21.2 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:28.994Z] x-ms-date:Fri, 26 Dec 2025 20:22:28 GMT
+[2025-12-26T20:22:28.994Z] Authorization:REDACTED
+[2025-12-26T20:22:28.994Z] client assembly: Azure.Storage.Blobs
+[2025-12-26T20:22:29.130Z] Response [06707ac6-66c4-4e74-acc9-6613982cb8e8] 200 OK (00.1s)
+[2025-12-26T20:22:29.130Z] Accept-Ranges:bytes
+[2025-12-26T20:22:29.130Z] ETag:"0x8DE44BC520AA6D5"
+[2025-12-26T20:22:29.131Z] Server:Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:29.131Z] x-ms-request-id:f8478de7-001e-0062-30a5-763ac7000000
+[2025-12-26T20:22:29.131Z] x-ms-client-request-id:06707ac6-66c4-4e74-acc9-6613982cb8e8
+[2025-12-26T20:22:29.131Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:29.132Z] x-ms-meta-FunctionInstance:REDACTED
+[2025-12-26T20:22:29.132Z] x-ms-creation-time:Fri, 26 Dec 2025 20:11:51 GMT
+[2025-12-26T20:22:29.132Z] x-ms-lease-status:unlocked
+[2025-12-26T20:22:29.132Z] x-ms-lease-state:expired
+[2025-12-26T20:22:29.133Z] x-ms-blob-type:BlockBlob
+[2025-12-26T20:22:29.133Z] x-ms-server-encrypted:true
+[2025-12-26T20:22:29.133Z] x-ms-access-tier:Hot
+[2025-12-26T20:22:29.134Z] x-ms-access-tier-inferred:true
+[2025-12-26T20:22:29.134Z] Date:Fri, 26 Dec 2025 20:22:28 GMT
+[2025-12-26T20:22:29.134Z] Content-Length:0
+[2025-12-26T20:22:29.134Z] Content-Type:application/octet-stream
+[2025-12-26T20:22:29.135Z] Content-MD5:1B2M2Y8AsgTpgAmY7PhCfg==
+[2025-12-26T20:22:29.135Z] Last-Modified:Fri, 26 Dec 2025 20:21:15 GMT
+[2025-12-26T20:22:29.135Z] 
+[2025-12-26T20:22:29.143Z] Request [fdbbd0f9-11bc-4310-9694-389b97757062] PUT https://rulesapplocalwqsndf64ts3.blob.core.windows.net/azure-webjobs-hosts/locks/fractal1-1397345676/host?comp=lease
+[2025-12-26T20:22:29.143Z] x-ms-lease-action:acquire
+[2025-12-26T20:22:29.144Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:29.144Z] Accept:application/xml
+[2025-12-26T20:22:29.144Z] x-ms-lease-duration:15
+[2025-12-26T20:22:29.144Z] x-ms-proposed-lease-id:0000000000000000000000001E398C97
+[2025-12-26T20:22:29.145Z] x-ms-client-request-id:fdbbd0f9-11bc-4310-9694-389b97757062
+[2025-12-26T20:22:29.145Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:29.145Z] User-Agent:azsdk-net-Storage.Blobs/12.21.2 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:29.145Z] x-ms-date:Fri, 26 Dec 2025 20:22:29 GMT
+[2025-12-26T20:22:29.146Z] Authorization:REDACTED
+[2025-12-26T20:22:29.146Z] client assembly: Azure.Storage.Blobs
+[2025-12-26T20:22:29.176Z] Response [fdbbd0f9-11bc-4310-9694-389b97757062] 201 Created (00.0s)
+[2025-12-26T20:22:29.176Z] ETag:"0x8DE44BC520AA6D5"
+[2025-12-26T20:22:29.176Z] Server:Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:29.177Z] x-ms-request-id:f8478e10-001e-0062-56a5-763ac7000000
+[2025-12-26T20:22:29.177Z] x-ms-client-request-id:fdbbd0f9-11bc-4310-9694-389b97757062
+[2025-12-26T20:22:29.177Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:29.178Z] x-ms-lease-id:00000000-0000-0000-0000-00001e398c97
+[2025-12-26T20:22:29.178Z] Date:Fri, 26 Dec 2025 20:22:28 GMT
+[2025-12-26T20:22:29.178Z] Content-Length:0
+[2025-12-26T20:22:29.179Z] Last-Modified:Fri, 26 Dec 2025 20:21:15 GMT
+[2025-12-26T20:22:29.179Z] 
+[2025-12-26T20:22:29.181Z] Request [c2160d71-5102-46ad-8990-1f73a034969b] HEAD https://rulesapplocalwqsndf64ts3.blob.core.windows.net/azure-webjobs-hosts/locks/fractal1-1397345676/host
+[2025-12-26T20:22:29.181Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:29.181Z] Accept:application/xml
+[2025-12-26T20:22:29.182Z] x-ms-client-request-id:c2160d71-5102-46ad-8990-1f73a034969b
+[2025-12-26T20:22:29.182Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:29.182Z] User-Agent:azsdk-net-Storage.Blobs/12.21.2 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:29.182Z] x-ms-date:Fri, 26 Dec 2025 20:22:29 GMT
+[2025-12-26T20:22:29.183Z] Authorization:REDACTED
+[2025-12-26T20:22:29.183Z] client assembly: Azure.Storage.Blobs
+[2025-12-26T20:22:29.209Z] Response [c2160d71-5102-46ad-8990-1f73a034969b] 200 OK (00.0s)
+[2025-12-26T20:22:29.210Z] Accept-Ranges:bytes
+[2025-12-26T20:22:29.210Z] ETag:"0x8DE44BC520AA6D5"
+[2025-12-26T20:22:29.211Z] Server:Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:29.211Z] x-ms-request-id:f8478e32-001e-0062-76a5-763ac7000000
+[2025-12-26T20:22:29.211Z] x-ms-client-request-id:c2160d71-5102-46ad-8990-1f73a034969b
+[2025-12-26T20:22:29.212Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:29.212Z] x-ms-meta-FunctionInstance:REDACTED
+[2025-12-26T20:22:29.212Z] x-ms-creation-time:Fri, 26 Dec 2025 20:11:51 GMT
+[2025-12-26T20:22:29.212Z] x-ms-lease-status:locked
+[2025-12-26T20:22:29.213Z] x-ms-lease-state:leased
+[2025-12-26T20:22:29.213Z] x-ms-lease-duration:fixed
+[2025-12-26T20:22:29.213Z] x-ms-blob-type:BlockBlob
+[2025-12-26T20:22:29.214Z] x-ms-server-encrypted:true
+[2025-12-26T20:22:29.214Z] x-ms-access-tier:Hot
+[2025-12-26T20:22:29.214Z] x-ms-access-tier-inferred:true
+[2025-12-26T20:22:29.215Z] Date:Fri, 26 Dec 2025 20:22:28 GMT
+[2025-12-26T20:22:29.215Z] Content-Length:0
+[2025-12-26T20:22:29.215Z] Content-Type:application/octet-stream
+[2025-12-26T20:22:29.216Z] Content-MD5:1B2M2Y8AsgTpgAmY7PhCfg==
+[2025-12-26T20:22:29.216Z] Last-Modified:Fri, 26 Dec 2025 20:21:15 GMT
+[2025-12-26T20:22:29.216Z] 
+[2025-12-26T20:22:29.219Z] Request [bd1bf379-a818-418c-a6cf-8584898d11f4] PUT https://rulesapplocalwqsndf64ts3.blob.core.windows.net/azure-webjobs-hosts/locks/fractal1-1397345676/host?comp=metadata
+[2025-12-26T20:22:29.219Z] x-ms-meta-FunctionInstance:REDACTED
+[2025-12-26T20:22:29.219Z] x-ms-lease-id:00000000-0000-0000-0000-00001e398c97
+[2025-12-26T20:22:29.220Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:29.220Z] Accept:application/xml
+[2025-12-26T20:22:29.220Z] x-ms-client-request-id:bd1bf379-a818-418c-a6cf-8584898d11f4
+[2025-12-26T20:22:29.221Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:29.221Z] User-Agent:azsdk-net-Storage.Blobs/12.21.2 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:29.221Z] x-ms-date:Fri, 26 Dec 2025 20:22:29 GMT
+[2025-12-26T20:22:29.222Z] Authorization:REDACTED
+[2025-12-26T20:22:29.222Z] client assembly: Azure.Storage.Blobs
+[2025-12-26T20:22:29.252Z] Response [bd1bf379-a818-418c-a6cf-8584898d11f4] 200 OK (00.0s)
+[2025-12-26T20:22:29.252Z] ETag:"0x8DE44BC7E09FCBE"
+[2025-12-26T20:22:29.252Z] Server:Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:29.253Z] x-ms-request-id:f8478e5d-001e-0062-1ea5-763ac7000000
+[2025-12-26T20:22:29.253Z] x-ms-client-request-id:bd1bf379-a818-418c-a6cf-8584898d11f4
+[2025-12-26T20:22:29.253Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:29.253Z] x-ms-request-server-encrypted:true
+[2025-12-26T20:22:29.254Z] Date:Fri, 26 Dec 2025 20:22:28 GMT
+[2025-12-26T20:22:29.254Z] Content-Length:0
+[2025-12-26T20:22:29.254Z] Last-Modified:Fri, 26 Dec 2025 20:22:29 GMT
+[2025-12-26T20:22:29.255Z] 
+[2025-12-26T20:22:29.257Z] Host lock lease acquired by instance ID '0000000000000000000000001E398C97'.
+[2025-12-26T20:22:30.338Z] Request [39fb30db-07ec-4a93-84b0-910d9660693c] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:30.338Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:30.338Z] Accept:application/xml
+[2025-12-26T20:22:30.339Z] x-ms-client-request-id:39fb30db-07ec-4a93-84b0-910d9660693c
+[2025-12-26T20:22:30.339Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:30.339Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:30.339Z] x-ms-date:Fri, 26 Dec 2025 20:22:30 GMT
+[2025-12-26T20:22:30.340Z] Authorization:REDACTED
+[2025-12-26T20:22:30.340Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:30.398Z] Response [39fb30db-07ec-4a93-84b0-910d9660693c] 200 OK (00.1s)
+[2025-12-26T20:22:30.399Z] Cache-Control:no-cache
+[2025-12-26T20:22:30.399Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:30.399Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:30.400Z] x-ms-request-id:28a14c65-4003-0011-76a5-766254000000
+[2025-12-26T20:22:30.400Z] x-ms-client-request-id:39fb30db-07ec-4a93-84b0-910d9660693c
+[2025-12-26T20:22:30.400Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:30.400Z] Date:Fri, 26 Dec 2025 20:22:29 GMT
+[2025-12-26T20:22:30.401Z] Content-Type:application/xml
+[2025-12-26T20:22:30.401Z] 
+[2025-12-26T20:22:32.413Z] Request [77ca8ab2-c610-4818-975f-7a6763993bb5] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:32.413Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:32.414Z] Accept:application/xml
+[2025-12-26T20:22:32.414Z] x-ms-client-request-id:77ca8ab2-c610-4818-975f-7a6763993bb5
+[2025-12-26T20:22:32.414Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:32.415Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:32.415Z] x-ms-date:Fri, 26 Dec 2025 20:22:32 GMT
+[2025-12-26T20:22:32.415Z] Authorization:REDACTED
+[2025-12-26T20:22:32.416Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:32.445Z] Response [77ca8ab2-c610-4818-975f-7a6763993bb5] 200 OK (00.0s)
+[2025-12-26T20:22:32.446Z] Cache-Control:no-cache
+[2025-12-26T20:22:32.446Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:32.447Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:32.447Z] x-ms-request-id:28a14f80-4003-0011-5ea5-766254000000
+[2025-12-26T20:22:32.448Z] x-ms-client-request-id:77ca8ab2-c610-4818-975f-7a6763993bb5
+[2025-12-26T20:22:32.448Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:32.448Z] Date:Fri, 26 Dec 2025 20:22:31 GMT
+[2025-12-26T20:22:32.449Z] Content-Type:application/xml
+[2025-12-26T20:22:32.449Z] 
+[2025-12-26T20:22:34.464Z] Request [7eb5019c-3a61-48e5-b4ee-9894108321ca] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:34.465Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:34.465Z] Accept:application/xml
+[2025-12-26T20:22:34.466Z] x-ms-client-request-id:7eb5019c-3a61-48e5-b4ee-9894108321ca
+[2025-12-26T20:22:34.466Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:34.467Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:34.467Z] x-ms-date:Fri, 26 Dec 2025 20:22:34 GMT
+[2025-12-26T20:22:34.467Z] Authorization:REDACTED
+[2025-12-26T20:22:34.467Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:34.515Z] Response [7eb5019c-3a61-48e5-b4ee-9894108321ca] 200 OK (00.0s)
+[2025-12-26T20:22:34.516Z] Cache-Control:no-cache
+[2025-12-26T20:22:34.516Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:34.516Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:34.517Z] x-ms-request-id:28a154ab-4003-0011-53a5-766254000000
+[2025-12-26T20:22:34.517Z] x-ms-client-request-id:7eb5019c-3a61-48e5-b4ee-9894108321ca
+[2025-12-26T20:22:34.517Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:34.518Z] Date:Fri, 26 Dec 2025 20:22:33 GMT
+[2025-12-26T20:22:34.518Z] Content-Type:application/xml
+[2025-12-26T20:22:34.518Z] 
+[2025-12-26T20:22:36.518Z] Request [7f3643ad-305a-4bdd-8713-0e488587c519] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:36.518Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:36.519Z] Accept:application/xml
+[2025-12-26T20:22:36.519Z] x-ms-client-request-id:7f3643ad-305a-4bdd-8713-0e488587c519
+[2025-12-26T20:22:36.519Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:36.520Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:36.520Z] x-ms-date:Fri, 26 Dec 2025 20:22:36 GMT
+[2025-12-26T20:22:36.520Z] Authorization:REDACTED
+[2025-12-26T20:22:36.521Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:36.558Z] Response [7f3643ad-305a-4bdd-8713-0e488587c519] 200 OK (00.0s)
+[2025-12-26T20:22:36.559Z] Cache-Control:no-cache
+[2025-12-26T20:22:36.559Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:36.559Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:36.560Z] x-ms-request-id:28a15987-4003-0011-68a5-766254000000
+[2025-12-26T20:22:36.560Z] x-ms-client-request-id:7f3643ad-305a-4bdd-8713-0e488587c519
+[2025-12-26T20:22:36.560Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:36.560Z] Date:Fri, 26 Dec 2025 20:22:35 GMT
+[2025-12-26T20:22:36.561Z] Content-Type:application/xml
+[2025-12-26T20:22:36.561Z] 
+[2025-12-26T20:22:38.570Z] Request [023a483f-7287-47e3-91de-773c9735cf79] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:38.571Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:38.571Z] Accept:application/xml
+[2025-12-26T20:22:38.571Z] x-ms-client-request-id:023a483f-7287-47e3-91de-773c9735cf79
+[2025-12-26T20:22:38.572Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:38.572Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:38.572Z] x-ms-date:Fri, 26 Dec 2025 20:22:38 GMT
+[2025-12-26T20:22:38.573Z] Authorization:REDACTED
+[2025-12-26T20:22:38.573Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:38.613Z] Response [023a483f-7287-47e3-91de-773c9735cf79] 200 OK (00.0s)
+[2025-12-26T20:22:38.613Z] Cache-Control:no-cache
+[2025-12-26T20:22:38.613Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:38.614Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:38.614Z] x-ms-request-id:28a15d0b-4003-0011-49a5-766254000000
+[2025-12-26T20:22:38.614Z] x-ms-client-request-id:023a483f-7287-47e3-91de-773c9735cf79
+[2025-12-26T20:22:38.615Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:38.615Z] Date:Fri, 26 Dec 2025 20:22:37 GMT
+[2025-12-26T20:22:38.615Z] Content-Type:application/xml
+[2025-12-26T20:22:38.615Z] 
+[2025-12-26T20:22:40.624Z] Request [f885809a-6244-482a-9d0e-0c76ba8fd703] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:40.625Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:40.625Z] Accept:application/xml
+[2025-12-26T20:22:40.626Z] x-ms-client-request-id:f885809a-6244-482a-9d0e-0c76ba8fd703
+[2025-12-26T20:22:40.626Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:40.626Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:40.626Z] x-ms-date:Fri, 26 Dec 2025 20:22:40 GMT
+[2025-12-26T20:22:40.627Z] Authorization:REDACTED
+[2025-12-26T20:22:40.627Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:40.660Z] Response [f885809a-6244-482a-9d0e-0c76ba8fd703] 200 OK (00.0s)
+[2025-12-26T20:22:40.661Z] Cache-Control:no-cache
+[2025-12-26T20:22:40.661Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:40.661Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:40.662Z] x-ms-request-id:28a160fe-4003-0011-04a5-766254000000
+[2025-12-26T20:22:40.662Z] x-ms-client-request-id:f885809a-6244-482a-9d0e-0c76ba8fd703
+[2025-12-26T20:22:40.662Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:40.662Z] Date:Fri, 26 Dec 2025 20:22:39 GMT
+[2025-12-26T20:22:40.663Z] Content-Type:application/xml
+[2025-12-26T20:22:40.663Z] 
+[2025-12-26T20:22:41.275Z] Request [e9a23146-9bbd-4779-b838-5f2bc1d2c9f6] PUT https://rulesapplocalwqsndf64ts3.blob.core.windows.net/azure-webjobs-hosts/locks/fractal1-1397345676/host?comp=lease
+[2025-12-26T20:22:41.275Z] x-ms-lease-action:renew
+[2025-12-26T20:22:41.275Z] x-ms-lease-id:00000000-0000-0000-0000-00001e398c97
+[2025-12-26T20:22:41.276Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:41.276Z] Accept:application/xml
+[2025-12-26T20:22:41.276Z] x-ms-client-request-id:e9a23146-9bbd-4779-b838-5f2bc1d2c9f6
+[2025-12-26T20:22:41.277Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:41.277Z] User-Agent:azsdk-net-Storage.Blobs/12.21.2 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:41.277Z] x-ms-date:Fri, 26 Dec 2025 20:22:41 GMT
+[2025-12-26T20:22:41.277Z] Authorization:REDACTED
+[2025-12-26T20:22:41.278Z] client assembly: Azure.Storage.Blobs
+[2025-12-26T20:22:41.299Z] Response [e9a23146-9bbd-4779-b838-5f2bc1d2c9f6] 200 OK (00.0s)
+[2025-12-26T20:22:41.299Z] ETag:"0x8DE44BC7E09FCBE"
+[2025-12-26T20:22:41.299Z] Server:Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:41.299Z] x-ms-request-id:f847c726-001e-0062-63a5-763ac7000000
+[2025-12-26T20:22:41.300Z] x-ms-client-request-id:e9a23146-9bbd-4779-b838-5f2bc1d2c9f6
+[2025-12-26T20:22:41.300Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:41.300Z] x-ms-lease-id:00000000-0000-0000-0000-00001e398c97
+[2025-12-26T20:22:41.301Z] Date:Fri, 26 Dec 2025 20:22:40 GMT
+[2025-12-26T20:22:41.301Z] Content-Length:0
+[2025-12-26T20:22:41.301Z] Last-Modified:Fri, 26 Dec 2025 20:22:29 GMT
+[2025-12-26T20:22:41.301Z] 
+[2025-12-26T20:22:42.675Z] Request [7b0dc843-797b-4b82-856a-851fa24b49eb] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:42.675Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:42.676Z] Accept:application/xml
+[2025-12-26T20:22:42.676Z] x-ms-client-request-id:7b0dc843-797b-4b82-856a-851fa24b49eb
+[2025-12-26T20:22:42.676Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:42.677Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:42.677Z] x-ms-date:Fri, 26 Dec 2025 20:22:42 GMT
+[2025-12-26T20:22:42.677Z] Authorization:REDACTED
+[2025-12-26T20:22:42.677Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:42.720Z] Response [7b0dc843-797b-4b82-856a-851fa24b49eb] 200 OK (00.0s)
+[2025-12-26T20:22:42.720Z] Cache-Control:no-cache
+[2025-12-26T20:22:42.721Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:42.721Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:42.721Z] x-ms-request-id:28a16467-4003-0011-4da5-766254000000
+[2025-12-26T20:22:42.722Z] x-ms-client-request-id:7b0dc843-797b-4b82-856a-851fa24b49eb
+[2025-12-26T20:22:42.722Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:42.722Z] Date:Fri, 26 Dec 2025 20:22:41 GMT
+[2025-12-26T20:22:42.722Z] Content-Type:application/xml
+[2025-12-26T20:22:42.723Z] 
+[2025-12-26T20:22:44.723Z] Request [d6d6f1db-7198-48cd-a133-2d644f2decc9] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:44.724Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:44.724Z] Accept:application/xml
+[2025-12-26T20:22:44.725Z] x-ms-client-request-id:d6d6f1db-7198-48cd-a133-2d644f2decc9
+[2025-12-26T20:22:44.725Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:44.725Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:44.726Z] x-ms-date:Fri, 26 Dec 2025 20:22:44 GMT
+[2025-12-26T20:22:44.726Z] Authorization:REDACTED
+[2025-12-26T20:22:44.726Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:44.759Z] Response [d6d6f1db-7198-48cd-a133-2d644f2decc9] 200 OK (00.0s)
+[2025-12-26T20:22:44.760Z] Cache-Control:no-cache
+[2025-12-26T20:22:44.761Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:44.761Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:44.761Z] x-ms-request-id:28a16a61-4003-0011-3fa5-766254000000
+[2025-12-26T20:22:44.762Z] x-ms-client-request-id:d6d6f1db-7198-48cd-a133-2d644f2decc9
+[2025-12-26T20:22:44.762Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:44.762Z] Date:Fri, 26 Dec 2025 20:22:44 GMT
+[2025-12-26T20:22:44.763Z] Content-Type:application/xml
+[2025-12-26T20:22:44.763Z] 
+[2025-12-26T20:22:46.761Z] Request [72db3a0b-f290-4826-9d72-f4a5f851fc4c] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:46.762Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:46.762Z] Accept:application/xml
+[2025-12-26T20:22:46.763Z] x-ms-client-request-id:72db3a0b-f290-4826-9d72-f4a5f851fc4c
+[2025-12-26T20:22:46.763Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:46.763Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:46.764Z] x-ms-date:Fri, 26 Dec 2025 20:22:46 GMT
+[2025-12-26T20:22:46.764Z] Authorization:REDACTED
+[2025-12-26T20:22:46.764Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:46.797Z] Response [72db3a0b-f290-4826-9d72-f4a5f851fc4c] 200 OK (00.0s)
+[2025-12-26T20:22:46.797Z] Cache-Control:no-cache
+[2025-12-26T20:22:46.798Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:46.798Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:46.798Z] x-ms-request-id:28a16f2b-4003-0011-50a5-766254000000
+[2025-12-26T20:22:46.799Z] x-ms-client-request-id:72db3a0b-f290-4826-9d72-f4a5f851fc4c
+[2025-12-26T20:22:46.799Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:46.799Z] Date:Fri, 26 Dec 2025 20:22:46 GMT
+[2025-12-26T20:22:46.800Z] Content-Type:application/xml
+[2025-12-26T20:22:46.800Z] 
+[2025-12-26T20:22:48.813Z] Request [885bc555-1516-4c00-87a7-ac88a2db1e61] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:48.813Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:48.814Z] Accept:application/xml
+[2025-12-26T20:22:48.814Z] x-ms-client-request-id:885bc555-1516-4c00-87a7-ac88a2db1e61
+[2025-12-26T20:22:48.814Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:48.815Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:48.815Z] x-ms-date:Fri, 26 Dec 2025 20:22:48 GMT
+[2025-12-26T20:22:48.815Z] Authorization:REDACTED
+[2025-12-26T20:22:48.816Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:48.849Z] Response [885bc555-1516-4c00-87a7-ac88a2db1e61] 200 OK (00.0s)
+[2025-12-26T20:22:48.849Z] Cache-Control:no-cache
+[2025-12-26T20:22:48.850Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:48.850Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:48.850Z] x-ms-request-id:28a1728f-4003-0011-2aa5-766254000000
+[2025-12-26T20:22:48.850Z] x-ms-client-request-id:885bc555-1516-4c00-87a7-ac88a2db1e61
+[2025-12-26T20:22:48.851Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:48.851Z] Date:Fri, 26 Dec 2025 20:22:48 GMT
+[2025-12-26T20:22:48.851Z] Content-Type:application/xml
+[2025-12-26T20:22:48.852Z] 
+[2025-12-26T20:22:50.856Z] Request [82a2bf9c-c593-462a-8b02-92e4c616bcc3] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:50.856Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:50.857Z] Accept:application/xml
+[2025-12-26T20:22:50.857Z] x-ms-client-request-id:82a2bf9c-c593-462a-8b02-92e4c616bcc3
+[2025-12-26T20:22:50.857Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:50.858Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:50.858Z] x-ms-date:Fri, 26 Dec 2025 20:22:50 GMT
+[2025-12-26T20:22:50.858Z] Authorization:REDACTED
+[2025-12-26T20:22:50.858Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:50.944Z] Response [82a2bf9c-c593-462a-8b02-92e4c616bcc3] 200 OK (00.1s)
+[2025-12-26T20:22:50.944Z] Cache-Control:no-cache
+[2025-12-26T20:22:50.944Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:50.944Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:50.945Z] x-ms-request-id:28a177ac-4003-0011-80a5-766254000000
+[2025-12-26T20:22:50.945Z] x-ms-client-request-id:82a2bf9c-c593-462a-8b02-92e4c616bcc3
+[2025-12-26T20:22:50.945Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:50.946Z] Date:Fri, 26 Dec 2025 20:22:50 GMT
+[2025-12-26T20:22:50.946Z] Content-Type:application/xml
+[2025-12-26T20:22:50.946Z] 
+[2025-12-26T20:22:52.944Z] Request [d97bc075-ead5-402a-bfea-3335cf25a6aa] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:52.944Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:52.945Z] Accept:application/xml
+[2025-12-26T20:22:52.945Z] x-ms-client-request-id:d97bc075-ead5-402a-bfea-3335cf25a6aa
+[2025-12-26T20:22:52.945Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:52.946Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:52.946Z] x-ms-date:Fri, 26 Dec 2025 20:22:52 GMT
+[2025-12-26T20:22:52.946Z] Authorization:REDACTED
+[2025-12-26T20:22:52.946Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:52.994Z] Response [d97bc075-ead5-402a-bfea-3335cf25a6aa] 200 OK (00.0s)
+[2025-12-26T20:22:52.995Z] Cache-Control:no-cache
+[2025-12-26T20:22:52.995Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:52.995Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:52.995Z] x-ms-request-id:28a17bdb-4003-0011-23a5-766254000000
+[2025-12-26T20:22:52.996Z] x-ms-client-request-id:d97bc075-ead5-402a-bfea-3335cf25a6aa
+[2025-12-26T20:22:52.996Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:52.996Z] Date:Fri, 26 Dec 2025 20:22:52 GMT
+[2025-12-26T20:22:52.996Z] Content-Type:application/xml
+[2025-12-26T20:22:52.997Z] 
+[2025-12-26T20:22:53.266Z] Request [0f2acb3e-3011-41ae-bc77-3c26684f90c6] PUT https://rulesapplocalwqsndf64ts3.blob.core.windows.net/azure-webjobs-hosts/locks/fractal1-1397345676/host?comp=lease
+[2025-12-26T20:22:53.267Z] x-ms-lease-action:renew
+[2025-12-26T20:22:53.267Z] x-ms-lease-id:00000000-0000-0000-0000-00001e398c97
+[2025-12-26T20:22:53.267Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:53.268Z] Accept:application/xml
+[2025-12-26T20:22:53.268Z] x-ms-client-request-id:0f2acb3e-3011-41ae-bc77-3c26684f90c6
+[2025-12-26T20:22:53.268Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:53.269Z] User-Agent:azsdk-net-Storage.Blobs/12.21.2 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:53.269Z] x-ms-date:Fri, 26 Dec 2025 20:22:53 GMT
+[2025-12-26T20:22:53.269Z] Authorization:REDACTED
+[2025-12-26T20:22:53.269Z] client assembly: Azure.Storage.Blobs
+[2025-12-26T20:22:53.306Z] Response [0f2acb3e-3011-41ae-bc77-3c26684f90c6] 200 OK (00.0s)
+[2025-12-26T20:22:53.307Z] ETag:"0x8DE44BC7E09FCBE"
+[2025-12-26T20:22:53.307Z] Server:Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:53.307Z] x-ms-request-id:f847fd0f-001e-0062-68a5-763ac7000000
+[2025-12-26T20:22:53.308Z] x-ms-client-request-id:0f2acb3e-3011-41ae-bc77-3c26684f90c6
+[2025-12-26T20:22:53.308Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:53.308Z] x-ms-lease-id:00000000-0000-0000-0000-00001e398c97
+[2025-12-26T20:22:53.308Z] Date:Fri, 26 Dec 2025 20:22:52 GMT
+[2025-12-26T20:22:53.309Z] Content-Length:0
+[2025-12-26T20:22:53.309Z] Last-Modified:Fri, 26 Dec 2025 20:22:29 GMT
+[2025-12-26T20:22:53.309Z] 
+[2025-12-26T20:22:54.997Z] Request [ba9de002-b7c6-4ffe-9007-90a3c38c7587] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:54.997Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:54.998Z] Accept:application/xml
+[2025-12-26T20:22:54.998Z] x-ms-client-request-id:ba9de002-b7c6-4ffe-9007-90a3c38c7587
+[2025-12-26T20:22:54.998Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:54.998Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:54.999Z] x-ms-date:Fri, 26 Dec 2025 20:22:54 GMT
+[2025-12-26T20:22:54.999Z] Authorization:REDACTED
+[2025-12-26T20:22:54.999Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:55.034Z] Response [ba9de002-b7c6-4ffe-9007-90a3c38c7587] 200 OK (00.0s)
+[2025-12-26T20:22:55.034Z] Cache-Control:no-cache
+[2025-12-26T20:22:55.035Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:55.035Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:55.035Z] x-ms-request-id:28a1816b-4003-0011-11a5-766254000000
+[2025-12-26T20:22:55.036Z] x-ms-client-request-id:ba9de002-b7c6-4ffe-9007-90a3c38c7587
+[2025-12-26T20:22:55.036Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:55.036Z] Date:Fri, 26 Dec 2025 20:22:54 GMT
+[2025-12-26T20:22:55.037Z] Content-Type:application/xml
+[2025-12-26T20:22:55.037Z] 
+[2025-12-26T20:22:57.038Z] Request [cbc3e1d4-aab4-465e-b466-168ce3fc7d6f] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:57.039Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:57.039Z] Accept:application/xml
+[2025-12-26T20:22:57.040Z] x-ms-client-request-id:cbc3e1d4-aab4-465e-b466-168ce3fc7d6f
+[2025-12-26T20:22:57.040Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:57.040Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:57.041Z] x-ms-date:Fri, 26 Dec 2025 20:22:57 GMT
+[2025-12-26T20:22:57.041Z] Authorization:REDACTED
+[2025-12-26T20:22:57.041Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:57.072Z] Response [cbc3e1d4-aab4-465e-b466-168ce3fc7d6f] 200 OK (00.0s)
+[2025-12-26T20:22:57.073Z] Cache-Control:no-cache
+[2025-12-26T20:22:57.073Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:57.073Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:57.073Z] x-ms-request-id:28a186e1-4003-0011-4fa5-766254000000
+[2025-12-26T20:22:57.074Z] x-ms-client-request-id:cbc3e1d4-aab4-465e-b466-168ce3fc7d6f
+[2025-12-26T20:22:57.074Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:57.074Z] Date:Fri, 26 Dec 2025 20:22:56 GMT
+[2025-12-26T20:22:57.074Z] Content-Type:application/xml
+[2025-12-26T20:22:57.075Z] 
+[2025-12-26T20:22:59.090Z] Request [ab7b9bd8-d5f1-4451-a590-12f53befd332] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:22:59.090Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:59.091Z] Accept:application/xml
+[2025-12-26T20:22:59.091Z] x-ms-client-request-id:ab7b9bd8-d5f1-4451-a590-12f53befd332
+[2025-12-26T20:22:59.091Z] x-ms-return-client-request-id:true
+[2025-12-26T20:22:59.092Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:22:59.092Z] x-ms-date:Fri, 26 Dec 2025 20:22:59 GMT
+[2025-12-26T20:22:59.092Z] Authorization:REDACTED
+[2025-12-26T20:22:59.092Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:22:59.149Z] Response [ab7b9bd8-d5f1-4451-a590-12f53befd332] 200 OK (00.1s)
+[2025-12-26T20:22:59.149Z] Cache-Control:no-cache
+[2025-12-26T20:22:59.149Z] Transfer-Encoding:chunked
+[2025-12-26T20:22:59.149Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:22:59.150Z] x-ms-request-id:28a18a9e-4003-0011-4ea5-766254000000
+[2025-12-26T20:22:59.150Z] x-ms-client-request-id:ab7b9bd8-d5f1-4451-a590-12f53befd332
+[2025-12-26T20:22:59.150Z] x-ms-version:2024-08-04
+[2025-12-26T20:22:59.150Z] Date:Fri, 26 Dec 2025 20:22:58 GMT
+[2025-12-26T20:22:59.151Z] Content-Type:application/xml
+[2025-12-26T20:22:59.151Z] 
+[2025-12-26T20:23:01.154Z] Request [7e6824c2-c7a1-49ca-90c9-4887b7d40e3d] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:23:01.154Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:01.154Z] Accept:application/xml
+[2025-12-26T20:23:01.155Z] x-ms-client-request-id:7e6824c2-c7a1-49ca-90c9-4887b7d40e3d
+[2025-12-26T20:23:01.155Z] x-ms-return-client-request-id:true
+[2025-12-26T20:23:01.155Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:23:01.156Z] x-ms-date:Fri, 26 Dec 2025 20:23:01 GMT
+[2025-12-26T20:23:01.156Z] Authorization:REDACTED
+[2025-12-26T20:23:01.156Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:23:01.191Z] Response [7e6824c2-c7a1-49ca-90c9-4887b7d40e3d] 200 OK (00.0s)
+[2025-12-26T20:23:01.192Z] Cache-Control:no-cache
+[2025-12-26T20:23:01.192Z] Transfer-Encoding:chunked
+[2025-12-26T20:23:01.192Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:23:01.193Z] x-ms-request-id:28a18da6-4003-0011-24a5-766254000000
+[2025-12-26T20:23:01.193Z] x-ms-client-request-id:7e6824c2-c7a1-49ca-90c9-4887b7d40e3d
+[2025-12-26T20:23:01.194Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:01.194Z] Date:Fri, 26 Dec 2025 20:23:00 GMT
+[2025-12-26T20:23:01.194Z] Content-Type:application/xml
+[2025-12-26T20:23:01.195Z] 
+[2025-12-26T20:23:03.194Z] Request [ce792e8a-81f2-4e3a-85ed-ef6256991fa8] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:23:03.194Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:03.195Z] Accept:application/xml
+[2025-12-26T20:23:03.195Z] x-ms-client-request-id:ce792e8a-81f2-4e3a-85ed-ef6256991fa8
+[2025-12-26T20:23:03.195Z] x-ms-return-client-request-id:true
+[2025-12-26T20:23:03.196Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:23:03.196Z] x-ms-date:Fri, 26 Dec 2025 20:23:03 GMT
+[2025-12-26T20:23:03.196Z] Authorization:REDACTED
+[2025-12-26T20:23:03.196Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:23:03.233Z] Response [ce792e8a-81f2-4e3a-85ed-ef6256991fa8] 200 OK (00.0s)
+[2025-12-26T20:23:03.234Z] Cache-Control:no-cache
+[2025-12-26T20:23:03.234Z] Transfer-Encoding:chunked
+[2025-12-26T20:23:03.235Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:23:03.235Z] x-ms-request-id:28a191af-4003-0011-0ea5-766254000000
+[2025-12-26T20:23:03.235Z] x-ms-client-request-id:ce792e8a-81f2-4e3a-85ed-ef6256991fa8
+[2025-12-26T20:23:03.235Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:03.236Z] Date:Fri, 26 Dec 2025 20:23:02 GMT
+[2025-12-26T20:23:03.236Z] Content-Type:application/xml
+[2025-12-26T20:23:03.236Z] 
+[2025-12-26T20:23:05.245Z] Request [52bcf860-9e25-4d3e-88f6-eb3dcf099c93] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:23:05.245Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:05.246Z] Accept:application/xml
+[2025-12-26T20:23:05.246Z] x-ms-client-request-id:52bcf860-9e25-4d3e-88f6-eb3dcf099c93
+[2025-12-26T20:23:05.246Z] x-ms-return-client-request-id:true
+[2025-12-26T20:23:05.247Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:23:05.247Z] x-ms-date:Fri, 26 Dec 2025 20:23:05 GMT
+[2025-12-26T20:23:05.247Z] Authorization:REDACTED
+[2025-12-26T20:23:05.248Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:23:05.263Z] Request [0e766a41-bb4a-49c4-8ebf-f3ab85aa8174] PUT https://rulesapplocalwqsndf64ts3.blob.core.windows.net/azure-webjobs-hosts/locks/fractal1-1397345676/host?comp=lease
+[2025-12-26T20:23:05.264Z] x-ms-lease-action:renew
+[2025-12-26T20:23:05.264Z] x-ms-lease-id:00000000-0000-0000-0000-00001e398c97
+[2025-12-26T20:23:05.264Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:05.264Z] Accept:application/xml
+[2025-12-26T20:23:05.265Z] x-ms-client-request-id:0e766a41-bb4a-49c4-8ebf-f3ab85aa8174
+[2025-12-26T20:23:05.265Z] x-ms-return-client-request-id:true
+[2025-12-26T20:23:05.265Z] User-Agent:azsdk-net-Storage.Blobs/12.21.2 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:23:05.266Z] x-ms-date:Fri, 26 Dec 2025 20:23:05 GMT
+[2025-12-26T20:23:05.266Z] Authorization:REDACTED
+[2025-12-26T20:23:05.266Z] client assembly: Azure.Storage.Blobs
+[2025-12-26T20:23:05.274Z] Response [52bcf860-9e25-4d3e-88f6-eb3dcf099c93] 200 OK (00.0s)
+[2025-12-26T20:23:05.274Z] Cache-Control:no-cache
+[2025-12-26T20:23:05.275Z] Transfer-Encoding:chunked
+[2025-12-26T20:23:05.275Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:23:05.275Z] x-ms-request-id:28a19773-4003-0011-1ba5-766254000000
+[2025-12-26T20:23:05.275Z] x-ms-client-request-id:52bcf860-9e25-4d3e-88f6-eb3dcf099c93
+[2025-12-26T20:23:05.276Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:05.276Z] Date:Fri, 26 Dec 2025 20:23:04 GMT
+[2025-12-26T20:23:05.276Z] Content-Type:application/xml
+[2025-12-26T20:23:05.276Z] 
+[2025-12-26T20:23:05.306Z] Response [0e766a41-bb4a-49c4-8ebf-f3ab85aa8174] 200 OK (00.0s)
+[2025-12-26T20:23:05.306Z] ETag:"0x8DE44BC7E09FCBE"
+[2025-12-26T20:23:05.307Z] Server:Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:23:05.307Z] x-ms-request-id:f8483287-001e-0062-62a5-763ac7000000
+[2025-12-26T20:23:05.307Z] x-ms-client-request-id:0e766a41-bb4a-49c4-8ebf-f3ab85aa8174
+[2025-12-26T20:23:05.308Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:05.308Z] x-ms-lease-id:00000000-0000-0000-0000-00001e398c97
+[2025-12-26T20:23:05.308Z] Date:Fri, 26 Dec 2025 20:23:04 GMT
+[2025-12-26T20:23:05.308Z] Content-Length:0
+[2025-12-26T20:23:05.309Z] Last-Modified:Fri, 26 Dec 2025 20:22:29 GMT
+[2025-12-26T20:23:05.309Z] 
+[2025-12-26T20:23:07.283Z] Request [f1be7fd7-5cdb-46d6-9233-47b602d405b5] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:23:07.284Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:07.284Z] Accept:application/xml
+[2025-12-26T20:23:07.285Z] x-ms-client-request-id:f1be7fd7-5cdb-46d6-9233-47b602d405b5
+[2025-12-26T20:23:07.285Z] x-ms-return-client-request-id:true
+[2025-12-26T20:23:07.285Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:23:07.286Z] x-ms-date:Fri, 26 Dec 2025 20:23:07 GMT
+[2025-12-26T20:23:07.286Z] Authorization:REDACTED
+[2025-12-26T20:23:07.286Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:23:07.312Z] Response [f1be7fd7-5cdb-46d6-9233-47b602d405b5] 200 OK (00.0s)
+[2025-12-26T20:23:07.313Z] Cache-Control:no-cache
+[2025-12-26T20:23:07.313Z] Transfer-Encoding:chunked
+[2025-12-26T20:23:07.313Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:23:07.314Z] x-ms-request-id:28a19bee-4003-0011-36a5-766254000000
+[2025-12-26T20:23:07.314Z] x-ms-client-request-id:f1be7fd7-5cdb-46d6-9233-47b602d405b5
+[2025-12-26T20:23:07.314Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:07.314Z] Date:Fri, 26 Dec 2025 20:23:06 GMT
+[2025-12-26T20:23:07.315Z] Content-Type:application/xml
+[2025-12-26T20:23:07.315Z] 
+[2025-12-26T20:23:09.325Z] Request [f360a14a-d060-4ec8-ae81-aa55c4ae1ff6] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:23:09.325Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:09.325Z] Accept:application/xml
+[2025-12-26T20:23:09.326Z] x-ms-client-request-id:f360a14a-d060-4ec8-ae81-aa55c4ae1ff6
+[2025-12-26T20:23:09.326Z] x-ms-return-client-request-id:true
+[2025-12-26T20:23:09.326Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:23:09.326Z] x-ms-date:Fri, 26 Dec 2025 20:23:09 GMT
+[2025-12-26T20:23:09.327Z] Authorization:REDACTED
+[2025-12-26T20:23:09.327Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:23:09.356Z] Response [f360a14a-d060-4ec8-ae81-aa55c4ae1ff6] 200 OK (00.0s)
+[2025-12-26T20:23:09.356Z] Cache-Control:no-cache
+[2025-12-26T20:23:09.357Z] Transfer-Encoding:chunked
+[2025-12-26T20:23:09.357Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:23:09.357Z] x-ms-request-id:28a19fd3-4003-0011-04a5-766254000000
+[2025-12-26T20:23:09.358Z] x-ms-client-request-id:f360a14a-d060-4ec8-ae81-aa55c4ae1ff6
+[2025-12-26T20:23:09.358Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:09.358Z] Date:Fri, 26 Dec 2025 20:23:08 GMT
+[2025-12-26T20:23:09.358Z] Content-Type:application/xml
+[2025-12-26T20:23:09.359Z] 
+[2025-12-26T20:23:11.369Z] Request [1cf18731-2c27-4c64-bb4b-83414ed233be] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:23:11.370Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:11.370Z] Accept:application/xml
+[2025-12-26T20:23:11.370Z] x-ms-client-request-id:1cf18731-2c27-4c64-bb4b-83414ed233be
+[2025-12-26T20:23:11.371Z] x-ms-return-client-request-id:true
+[2025-12-26T20:23:11.371Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:23:11.371Z] x-ms-date:Fri, 26 Dec 2025 20:23:11 GMT
+[2025-12-26T20:23:11.371Z] Authorization:REDACTED
+[2025-12-26T20:23:11.372Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:23:11.394Z] Response [1cf18731-2c27-4c64-bb4b-83414ed233be] 200 OK (00.0s)
+[2025-12-26T20:23:11.395Z] Cache-Control:no-cache
+[2025-12-26T20:23:11.395Z] Transfer-Encoding:chunked
+[2025-12-26T20:23:11.396Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:23:11.396Z] x-ms-request-id:28a1a32e-4003-0011-33a5-766254000000
+[2025-12-26T20:23:11.397Z] x-ms-client-request-id:1cf18731-2c27-4c64-bb4b-83414ed233be
+[2025-12-26T20:23:11.397Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:11.397Z] Date:Fri, 26 Dec 2025 20:23:10 GMT
+[2025-12-26T20:23:11.397Z] Content-Type:application/xml
+[2025-12-26T20:23:11.398Z] 
+[2025-12-26T20:23:13.406Z] Request [724888d9-7cbe-4da3-b5d7-791af1468949] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:23:13.406Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:13.406Z] Accept:application/xml
+[2025-12-26T20:23:13.407Z] x-ms-client-request-id:724888d9-7cbe-4da3-b5d7-791af1468949
+[2025-12-26T20:23:13.407Z] x-ms-return-client-request-id:true
+[2025-12-26T20:23:13.407Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:23:13.407Z] x-ms-date:Fri, 26 Dec 2025 20:23:13 GMT
+[2025-12-26T20:23:13.408Z] Authorization:REDACTED
+[2025-12-26T20:23:13.408Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:23:13.437Z] Response [724888d9-7cbe-4da3-b5d7-791af1468949] 200 OK (00.0s)
+[2025-12-26T20:23:13.438Z] Cache-Control:no-cache
+[2025-12-26T20:23:13.438Z] Transfer-Encoding:chunked
+[2025-12-26T20:23:13.438Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:23:13.439Z] x-ms-request-id:28a1a7a3-4003-0011-09a5-766254000000
+[2025-12-26T20:23:13.439Z] x-ms-client-request-id:724888d9-7cbe-4da3-b5d7-791af1468949
+[2025-12-26T20:23:13.439Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:13.439Z] Date:Fri, 26 Dec 2025 20:23:12 GMT
+[2025-12-26T20:23:13.440Z] Content-Type:application/xml
+[2025-12-26T20:23:13.440Z] 
+[2025-12-26T20:23:15.441Z] Request [df40607b-a5cc-4781-b5de-30f2e575d98d] GET https://rulesapplocalwqsndf64ts3.queue.core.windows.net/rules-ingest/messages?numofmessages=1&visibilitytimeout=600
+[2025-12-26T20:23:15.441Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:15.442Z] Accept:application/xml
+[2025-12-26T20:23:15.442Z] x-ms-client-request-id:df40607b-a5cc-4781-b5de-30f2e575d98d
+[2025-12-26T20:23:15.442Z] x-ms-return-client-request-id:true
+[2025-12-26T20:23:15.443Z] User-Agent:azsdk-net-Storage.Queues/12.19.0 (.NET 8.0.22; Microsoft Windows 10.0.26200)
+[2025-12-26T20:23:15.443Z] x-ms-date:Fri, 26 Dec 2025 20:23:15 GMT
+[2025-12-26T20:23:15.443Z] Authorization:REDACTED
+[2025-12-26T20:23:15.444Z] client assembly: Azure.Storage.Queues
+[2025-12-26T20:23:15.467Z] Response [df40607b-a5cc-4781-b5de-30f2e575d98d] 200 OK (00.0s)
+[2025-12-26T20:23:15.468Z] Cache-Control:no-cache
+[2025-12-26T20:23:15.468Z] Transfer-Encoding:chunked
+[2025-12-26T20:23:15.468Z] Server:Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
+[2025-12-26T20:23:15.468Z] x-ms-request-id:28a1adcb-4003-0011-70a5-766254000000
+[2025-12-26T20:23:15.469Z] x-ms-client-request-id:df40607b-a5cc-4781-b5de-30f2e575d98d
+[2025-12-26T20:23:15.469Z] x-ms-version:2024-08-04
+[2025-12-26T20:23:15.469Z] Date:Fri, 26 Dec 2025 20:23:14 GMT
+[2025-12-26T20:23:15.470Z] Content-Type:application/xml
+[2025-12-26T20:23:15.470Z] 
