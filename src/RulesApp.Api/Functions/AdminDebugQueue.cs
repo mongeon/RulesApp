@@ -26,7 +26,11 @@ public class AdminDebugQueue
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/debug/queue")] HttpRequest req,
         CancellationToken ct)
     {
-        var name = req.Query["name"].ToString();
+        if (!req.Query.TryGetValue("name", out var nameValue))
+        {
+            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
+        }
+        var name = nameValue.ToString();
         if (string.IsNullOrWhiteSpace(name))
         {
             return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
@@ -57,8 +61,13 @@ public class AdminDebugQueue
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/debug/queue/receive")] HttpRequest req,
         CancellationToken ct)
     {
-        var name = req.Query["name"].ToString();
-        var maxStr = req.Query["max"].ToString();
+        if (!req.Query.TryGetValue("name", out var nameValue))
+        {
+            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
+        }
+        var name = nameValue.ToString();
+        
+        var maxStr = req.Query.TryGetValue("max", out var maxValue) ? maxValue.ToString() : "1";
         var max = int.TryParse(maxStr, out var maxParsed) ? Math.Clamp(maxParsed, 1, 32) : 1;
 
         if (string.IsNullOrWhiteSpace(name))
@@ -187,8 +196,13 @@ public class AdminDebugQueue
         [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "api/admin/debug/queue")] HttpRequest req,
         CancellationToken ct)
     {
-        var name = req.Query["name"].ToString();
-        var drop = bool.TryParse(req.Query["drop"], out var d) && d;
+        if (!req.Query.TryGetValue("name", out var nameValue))
+        {
+            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
+        }
+        var name = nameValue.ToString();
+        var drop = req.Query.TryGetValue("drop", out var dropValue) && bool.TryParse(dropValue, out var d) && d;
+        
         if (string.IsNullOrWhiteSpace(name))
         {
             return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
@@ -219,8 +233,13 @@ public class AdminDebugQueue
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/debug/queue/send")] HttpRequest req,
         CancellationToken ct)
     {
-        var name = req.Query["name"].ToString();
-        var body = req.Query["body"].ToString();
+        if (!req.Query.TryGetValue("name", out var nameValue))
+        {
+            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
+        }
+        var name = nameValue.ToString();
+        var body = req.Query.TryGetValue("body", out var bodyValue) ? bodyValue.ToString() : "test-message";
+        
         if (string.IsNullOrWhiteSpace(name))
         {
             return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });

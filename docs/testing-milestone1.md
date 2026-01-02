@@ -49,18 +49,21 @@ Functions:
 ```powershell
 # Upload Canada FR rulebook (example)
 curl.exe -X POST http://localhost:7071/api/admin/upload `
-  -F "file=@C:\Users\gabri\Downloads\6cb071ff-2f69-11f0-80ed-0611ff2db335.pdf" `
-  -F "docType=CanadaFr" `
-  -F "seasonId=2025"
+  -F "seasonId=2026" `
+  -F "scopeLevel=Canada" `
+  -F "docType=Fr" `
+  -F "file=@C:\Users\gabri\Downloads\6cb071ff-2f69-11f0-80ed-0611ff2db335.pdf"
 ```
 
 Expected response:
 ```json
 {
-  "message": "Upload successful",
-  "blobPath": "rules/2025/global/CanadaFr.pdf",
-  "seasonId": "2025",
+  "jobId": "job_abc123...",
+  "status": "queued",
+  "blobPath": "rules/2026/global/CanadaFr.pdf",
+  "seasonId": "2026",
   "associationId": null,
+  "scopeLevel": "Canada",
   "docType": "CanadaFr",
   "size": 123456
 }

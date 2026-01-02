@@ -1,10 +1,11 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using RulesApp.Api.Services;
 using RulesApp.Shared;
 using RulesApp.Shared.Helpers;
+using System.Net;
+using System.Text.Json;
 
 namespace RulesApp.Api.Functions;
 
@@ -12,80 +13,161 @@ public class AdminUpload
 {
     private readonly ILogger<AdminUpload> _logger;
     private readonly IBlobStore _blobStore;
+    private readonly IQueueStore _queueStore;
 
-    public AdminUpload(ILogger<AdminUpload> logger, IBlobStore blobStore)
+    public AdminUpload(ILogger<AdminUpload> logger, IBlobStore blobStore, IQueueStore queueStore)
     {
         _logger = logger;
         _blobStore = blobStore;
+        _queueStore = queueStore;
     }
 
     [Function("AdminUpload")]
-    public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/upload")] HttpRequest req,
+    public async Task<HttpResponseData> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/upload")] HttpRequestData req,
         CancellationToken ct)
     {
         try
         {
-            // Parse form data
-            var form = await req.ReadFormAsync(ct);
+            _logger.LogInformation("Upload request received");
             
-            var seasonId = form["seasonId"].ToString();
-            if (string.IsNullOrEmpty(seasonId))
+            // Parse JSON body
+            UploadRequest? uploadRequest;
+            try
             {
-                seasonId = "2025"; // Default to current season if not specified
+                uploadRequest = await req.ReadFromJsonAsync<UploadRequest>(ct);
+                if (uploadRequest == null)
+                {
+                    var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                    await badResponse.WriteAsJsonAsync(new { error = "Invalid request body" });
+                    return badResponse;
+                }
             }
-            
-            var associationId = form["associationId"].ToString();
-            if (string.IsNullOrEmpty(associationId))
+            catch (Exception ex)
             {
-                associationId = null;
+                _logger.LogError(ex, "Failed to parse request");
+                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badResponse.WriteAsJsonAsync(new { error = $"Failed to parse request: {ex.Message}" });
+                return badResponse;
             }
+
+            var seasonId = string.IsNullOrEmpty(uploadRequest.SeasonId) ? "2026" : uploadRequest.SeasonId;
+            var associationId = uploadRequest.AssociationId;
             
-            var docTypeStr = form["docType"].ToString();
-            if (!Enum.TryParse<DocType>(docTypeStr, out var docType))
+            if (!Enum.TryParse<ScopeLevel>(uploadRequest.ScopeLevel, true, out var scopeLevel))
             {
-                return new BadRequestObjectResult(new { error = "Invalid docType. Must be: CanadaFr, CanadaEn, QuebecFr, or RegionalFr" });
+                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badResponse.WriteAsJsonAsync(new { error = "Invalid scopeLevel. Must be: Canada, Quebec, or Regional" });
+                return badResponse;
+            }
+
+            if (string.IsNullOrEmpty(uploadRequest.DocType))
+            {
+                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badResponse.WriteAsJsonAsync(new { error = "docType is required. Must be: Fr or En" });
+                return badResponse;
+            }
+
+            // Combine scopeLevel + docType to get DocType enum
+            var docTypeEnumStr = $"{scopeLevel}{uploadRequest.DocType}";
+            if (!Enum.TryParse<DocType>(docTypeEnumStr, true, out var docType))
+            {
+                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badResponse.WriteAsJsonAsync(new { error = $"Invalid combination: {scopeLevel} + {uploadRequest.DocType}. Valid docTypes are Fr or En." });
+                return badResponse;
             }
             
             // Validate regional requires association
-            if (docType.RequiresAssociation() && string.IsNullOrEmpty(associationId))
+            if (scopeLevel == ScopeLevel.Regional && string.IsNullOrEmpty(associationId))
             {
-                return new BadRequestObjectResult(new { error = "associationId is required for RegionalFr" });
+                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badResponse.WriteAsJsonAsync(new { error = "associationId is required for Regional scope" });
+                return badResponse;
             }
-            
-            var file = form.Files.GetFile("file");
-            if (file == null || file.Length == 0)
+
+            if (string.IsNullOrEmpty(uploadRequest.FileName) || !uploadRequest.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
             {
-                return new BadRequestObjectResult(new { error = "No file uploaded" });
+                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badResponse.WriteAsJsonAsync(new { error = "Only PDF files are allowed" });
+                return badResponse;
             }
-            
-            if (!file.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+
+            if (string.IsNullOrEmpty(uploadRequest.FileContentBase64))
             {
-                return new BadRequestObjectResult(new { error = "Only PDF files are allowed" });
+                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badResponse.WriteAsJsonAsync(new { error = "File content is required" });
+                return badResponse;
+            }
+
+            // Decode base64 file content
+            byte[] fileBytes;
+            try
+            {
+                fileBytes = Convert.FromBase64String(uploadRequest.FileContentBase64);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to decode base64 file content");
+                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badResponse.WriteAsJsonAsync(new { error = "Invalid base64 file content" });
+                return badResponse;
             }
             
             // Upload to blob
             var blobPath = BlobPaths.GetRulesPdfPath(seasonId, associationId, docType);
             
-            using var stream = file.OpenReadStream();
+            using var stream = new MemoryStream(fileBytes);
             await _blobStore.UploadAsync(blobPath, stream, "application/pdf", ct);
             
-            _logger.LogInformation("Uploaded PDF to {BlobPath}", blobPath);
+            _logger.LogInformation("Uploaded PDF to {BlobPath}, size: {Size}", blobPath, fileBytes.Length);
+
+            // Queue ingestion job
+            var jobId = $"job_{Guid.NewGuid():N}";
+            var language = uploadRequest.DocType.Equals("Fr", StringComparison.OrdinalIgnoreCase) ? Language.FR : Language.EN;
             
-            return new OkObjectResult(new 
+            var message = new IngestRulesMessage(
+                jobId,
+                seasonId,
+                associationId,
+                docType,
+                scopeLevel,
+                language,
+                blobPath
+            );
+
+            await _queueStore.EnqueueAsync("rules-ingest", message, ct);
+            
+            _logger.LogInformation("Queued ingestion job {JobId} for {BlobPath}", jobId, blobPath);
+            
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(new 
             { 
-                message = "Upload successful",
+                jobId,
+                status = "queued",
                 blobPath,
                 seasonId,
                 associationId,
+                scopeLevel = scopeLevel.ToString(),
                 docType = docType.ToString(),
-                size = file.Length
+                size = fileBytes.Length
             });
+            return response;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error uploading PDF");
-            return new StatusCodeResult(500);
+            var errorResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await errorResponse.WriteAsJsonAsync(new { error = ex.Message });
+            return errorResponse;
         }
     }
+
+    private record UploadRequest(
+        string? SeasonId,
+        string? AssociationId,
+        string ScopeLevel,
+        string DocType,
+        string FileName,
+        string FileContentBase64
+    );
 }

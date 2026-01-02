@@ -17,7 +17,12 @@ public interface IChunker
 
 public class Chunker : IChunker
 {
-    private static readonly Regex RuleNumberPattern = new(@"^\s*(?:R[èe]gle|Rule)\s+(\d+(?:\.\d+)?)", 
+    // Match multiple patterns:
+    // 1. Standard: "1.04 THE PLAYING FIELD" or "Règle 1.04"
+    // 2. Quebec format: "34 55.7 - REFUS DE QUITTER" (page number, then rule number, then dash)
+    // 3. With subsections: "5.09(a)" or "105.2.1"
+    private static readonly Regex RuleNumberPattern = new(
+        @"(?:^|\n)\s*(?:\d+\s+)?(?:R[èe]gle\s+)?(\d+\.\d+(?:\.\d+)?(?:\s*\([a-z]\))?)\s*(?:-|[A-ZÀÂÇÉÈÊËÎÏÔÛÙÜŸŒÆ])", 
         RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
     
     private const int MaxChunkSize = 1000;
@@ -56,7 +61,14 @@ public class Chunker : IChunker
                 // Try to detect rule number
                 var ruleMatch = RuleNumberPattern.Match(chunkText);
                 string? ruleNumberText = ruleMatch.Success ? ruleMatch.Groups[1].Value : null;
-                string? ruleKey = ruleNumberText != null ? $"RULE_{ruleNumberText.Replace(".", "_")}" : null;
+                
+                string? ruleKey = null;
+                if (!string.IsNullOrEmpty(ruleNumberText))
+                {
+                    // Normalize: remove spaces, replace dots with underscores, remove parentheses
+                    var normalized = ruleNumberText.Replace(" ", "").Replace(".", "_").Replace("(", "_").Replace(")", "");
+                    ruleKey = $"RULE_{normalized}";
+                }
                 
                 // Extract title (first line or sentence)
                 var title = ExtractTitle(chunkText);

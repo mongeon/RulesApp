@@ -29,7 +29,11 @@ public class AdminDebugInvokeWorker
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/debug/invoke-worker")] HttpRequest req,
         CancellationToken ct)
     {
-        var jobId = req.Query["jobId"].ToString();
+        if (!req.Query.TryGetValue("jobId", out var jobIdValue))
+        {
+            return new BadRequestObjectResult(new { error = "Missing 'jobId' query parameter." });
+        }
+        var jobId = jobIdValue.ToString();
         if (string.IsNullOrWhiteSpace(jobId))
         {
             return new BadRequestObjectResult(new { error = "Missing 'jobId' query parameter." });

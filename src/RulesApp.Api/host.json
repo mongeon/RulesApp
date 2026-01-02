@@ -16,7 +16,8 @@
     },
     "extensions": {
         "http": {
-            "routePrefix": ""
+            "routePrefix": "",
+            "enableBuffering": true
         },
         "queues": {
             "batchSize": 1,

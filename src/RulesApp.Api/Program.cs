@@ -38,6 +38,8 @@ builder.Services.AddSingleton<ITableStore, TableStore>();
 // Business services
 builder.Services.AddSingleton<IPdfExtractor, PdfExtractor>();
 builder.Services.AddSingleton<IChunker, Chunker>();
+builder.Services.AddSingleton<OverrideDetector>();
+builder.Services.AddSingleton<PrecedenceResolver>();
 
 // Azure AI Search
 var searchEndpoint = builder.Configuration["Search:Endpoint"]

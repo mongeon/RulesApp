@@ -66,7 +66,8 @@
     <div class="results mt-4">
         <h3>@results.TotalResults résultat(s) pour "@results.Query"</h3>
         
-        @if (results.Results.Count == 0)
+        @if ((results.RuleGroups == null || results.RuleGroups.Count == 0) && 
+             (results.UngroupedResults == null || results.UngroupedResults.Count == 0))
         {
             <div class="alert alert-info">
                 Aucun résultat trouvé. Essayez d'autres mots-clés.
@@ -74,29 +75,89 @@
         }
         else
         {
-            @foreach (var hit in results.Results)
+            @* Display rule groups first *@
+            @if (results.RuleGroups != null)
             {
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            @if (!string.IsNullOrEmpty(hit.RuleNumberText))
+                @foreach (var group in results.RuleGroups)
+                {
+                    <div class="card mb-3 border-primary">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="card-title">
+                                    @if (!string.IsNullOrEmpty(group.PrimaryChunk.RuleNumberText))
+                                    {
+                                        <span class="badge bg-primary me-2">@group.PrimaryChunk.RuleNumberText</span>
+                                    }
+                                    @(group.PrimaryChunk.Title ?? "Règlement")
+                                    <span class="badge bg-success ms-2">Règle principale</span>
+                                </h5>
+                            </div>
+                            <p class="card-text">@group.PrimaryChunk.TextPreview...</p>
+                            <div class="text-muted small">
+                                <span class="me-3">📄 Pages @group.PrimaryChunk.PageStart-@group.PrimaryChunk.PageEnd</span>
+                                <span class="me-3">📚 @group.PrimaryChunk.Scope (@group.PrimaryChunk.DocType)</span>
+                                @if (!string.IsNullOrEmpty(group.PrimaryChunk.AssociationId))
+                                {
+                                    <span class="me-3">🏢 @group.PrimaryChunk.AssociationId</span>
+                                }
+                                <span>⭐ Score: @group.PrimaryChunk.Score.ToString("F2")</span>
+                            </div>
+                            
+                            @* Show alternate chunks if any *@
+                            @if (group.AlternateChunks != null && group.AlternateChunks.Count > 0)
                             {
-                                <span class="badge bg-primary me-2">@hit.RuleNumberText</span>
+                                <div class="mt-3">
+                                    <h6 class="text-muted">Versions alternatives (@group.AlternateChunks.Count):</h6>
+                                    @foreach (var alt in group.AlternateChunks)
+                                    {
+                                        <div class="card border-secondary mt-2">
+                                            <div class="card-body py-2">
+                                                <div class="text-muted small">
+                                                    <span class="me-3">📚 @alt.Scope (@alt.DocType)</span>
+                                                    <span class="me-3">📄 Pages @alt.PageStart-@alt.PageEnd</span>
+                                                    @if (!string.IsNullOrEmpty(alt.AssociationId))
+                                                    {
+                                                        <span class="me-3">🏢 @alt.AssociationId</span>
+                                                    }
+                                                    <span>⭐ @alt.Score.ToString("F2")</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
                             }
-                            @(hit.Title ?? "Règlement")
-                        </h5>
-                        <p class="card-text">@hit.TextPreview...</p>
-                        <div class="text-muted small">
-                            <span class="me-3">📄 Pages @hit.PageStart-@hit.PageEnd</span>
-                            <span class="me-3">📚 @hit.Scope (@hit.DocType)</span>
-                            @if (!string.IsNullOrEmpty(hit.AssociationId))
-                            {
-                                <span class="me-3">🏢 @hit.AssociationId</span>
-                            }
-                            <span>⭐ Score: @hit.Score.ToString("F2")</span>
                         </div>
                     </div>
-                </div>
+                }
+            }
+            
+            @* Display ungrouped results *@
+            @if (results.UngroupedResults != null)
+            {
+                @foreach (var hit in results.UngroupedResults)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @if (!string.IsNullOrEmpty(hit.RuleNumberText))
+                                {
+                                    <span class="badge bg-secondary me-2">@hit.RuleNumberText</span>
+                                }
+                                @(hit.Title ?? "Règlement")
+                            </h5>
+                            <p class="card-text">@hit.TextPreview...</p>
+                            <div class="text-muted small">
+                                <span class="me-3">📄 Pages @hit.PageStart-@hit.PageEnd</span>
+                                <span class="me-3">📚 @hit.Scope (@hit.DocType)</span>
+                                @if (!string.IsNullOrEmpty(hit.AssociationId))
+                                {
+                                    <span class="me-3">🏢 @hit.AssociationId</span>
+                                }
+                                <span>⭐ Score: @hit.Score.ToString("F2")</span>
+                            </div>
+                        </div>
+                    </div>
+                }
             }
         }
     </div>
@@ -108,7 +169,7 @@
     private bool includeQuebec = true;
     private bool includeRegional = false;
     private string? associationId;
-    private SearchResponse? results;
+    private SearchResponseWithPrecedence? results;
     private string? errorMessage;
     private bool isSearching = false;
 
@@ -144,11 +205,11 @@
             }
 
             var request = new SearchRequest(query, null, associationId, scopes, 10);
-            var response = await Http.PostAsJsonAsync("search", request);
+            var response = await Http.PostAsJsonAsync("api/search", request);
 
             if (response.IsSuccessStatusCode)
             {
-                results = await response.Content.ReadFromJsonAsync<SearchResponse>();
+                results = await response.Content.ReadFromJsonAsync<SearchResponseWithPrecedence>();
             }
             else
             {

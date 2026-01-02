@@ -37,8 +37,14 @@ public class AdminDebugChunk
     {
         try
         {
-            var jobId = req.Query["jobId"].ToString();
-            var chunkId = req.Query["chunkId"].ToString();
+            if (!req.Query.TryGetValue("jobId", out var jobIdValue) ||
+                !req.Query.TryGetValue("chunkId", out var chunkIdValue))
+            {
+                return new BadRequestObjectResult(new { error = "jobId and chunkId are required" });
+            }
+            
+            var jobId = jobIdValue.ToString();
+            var chunkId = chunkIdValue.ToString();
             
             if (string.IsNullOrEmpty(jobId) || string.IsNullOrEmpty(chunkId))
             {

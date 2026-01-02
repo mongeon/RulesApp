@@ -9,6 +9,7 @@ public static class DocTypeHelpers
             DocType.CanadaFr => ScopeLevel.Canada,
             DocType.CanadaEn => ScopeLevel.Canada,
             DocType.QuebecFr => ScopeLevel.Quebec,
+            DocType.QuebecEn => ScopeLevel.Quebec,
             DocType.RegionalFr => ScopeLevel.Regional,
             _ => throw new ArgumentOutOfRangeException(nameof(docType))
         };
@@ -21,6 +22,7 @@ public static class DocTypeHelpers
             DocType.CanadaFr => Language.FR,
             DocType.CanadaEn => Language.EN,
             DocType.QuebecFr => Language.FR,
+            DocType.QuebecEn => Language.EN,
             DocType.RegionalFr => Language.FR,
             _ => throw new ArgumentOutOfRangeException(nameof(docType))
         };
@@ -38,6 +40,7 @@ public static class DocTypeHelpers
             DocType.CanadaFr => "Canada (FR)",
             DocType.CanadaEn => "Canada (EN)",
             DocType.QuebecFr => "Quebec (FR)",
+            DocType.QuebecEn => "Quebec (EN)",
             DocType.RegionalFr => $"Regional:{associationId}",
             _ => throw new ArgumentOutOfRangeException(nameof(docType))
         };
