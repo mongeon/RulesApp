@@ -83,17 +83,39 @@ if ($WhatIf) {
         --parameters $paramFile `
         --name $deploymentName
 } else {
-    az deployment group create `
-        --resource-group $ResourceGroupName `
-        --template-file $templateFile `
-        --parameters $paramFile `
-        --name $deploymentName `
-        --output json | Out-Null
+    Write-Host "   Deploying (this may take 3-10 minutes)..." -ForegroundColor Yellow
     
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "   ✅ Deployment completed successfully" -ForegroundColor Green
-    } else {
-        Write-Error "Deployment failed"
+    # Retry logic for deployment (Azure Cognitive Services can take time to provision)
+    $maxRetries = 3
+    $retryCount = 0
+    $deploymentSucceeded = $false
+    
+    while ($retryCount -lt $maxRetries -and -not $deploymentSucceeded) {
+        if ($retryCount -gt 0) {
+            Write-Host "   ⏳ Retry attempt $retryCount/$($maxRetries - 1) (waiting 30 seconds)..." -ForegroundColor Yellow
+            Start-Sleep -Seconds 30
+        }
+        
+        az deployment group create `
+            --resource-group $ResourceGroupName `
+            --template-file $templateFile `
+            --parameters $paramFile `
+            --name "$deploymentName-attempt$retryCount" `
+            --output json | Out-Null
+        
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "   ✅ Deployment completed successfully" -ForegroundColor Green
+            $deploymentSucceeded = $true
+        } else {
+            $retryCount++
+            if ($retryCount -lt $maxRetries) {
+                Write-Host "   ⚠️  Deployment attempt failed. Common cause: Azure resources still provisioning." -ForegroundColor Yellow
+            }
+        }
+    }
+    
+    if (-not $deploymentSucceeded) {
+        Write-Error "Deployment failed after $maxRetries attempts. Check if Azure OpenAI service is fully provisioned."
         exit 1
     }
 }

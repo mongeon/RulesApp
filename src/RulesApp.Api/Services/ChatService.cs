@@ -41,11 +41,18 @@ public class ChatService : IChatService
     public async Task<ChatResponse> ProcessQueryAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
         // 1. Retrieve candidates from search
+        // Build scope list: always include Canada and Quebec; include Regional if association is provided
+        var scopes = new List<string> { "Canada", "Quebec" };
+        if (!string.IsNullOrEmpty(request.AssociationId))
+        {
+            scopes.Add("Regional");
+        }
+
         var searchRequest = new SearchRequest(
             Query: request.Query,
             SeasonId: request.SeasonId,
             AssociationId: request.AssociationId,
-            Scopes: null, // Search all scopes
+            Scopes: scopes,
             Top: 15 // Retrieve top candidates for precision
         );
 

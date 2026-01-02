@@ -38,8 +38,8 @@ Users ask questions in natural language. The system responds **only** with infor
 ### Rulebook
 A rulebook is one of:
 - `Canada` (FR/EN)
-- `Quebec` (FR)
-- `Regional:{associationId}` (FR)
+- `Quebec` (FR/EN)
+- `Regional:{associationId}` (FR or EN or both)
 
 ### Chunk
 A **chunk** is the unit indexed/searched (typically a rule or section).
@@ -114,10 +114,10 @@ Confirmed mappings can be applied at runtime to:
 ### Supported languages
 - UI and responses must support **French and English**.
 - Canada rulebook exists in **FR + EN**.
-- Quebec and regional exist in **FR only**.
+- Quebec and regional exist in **FR or EN or both**.
 
 ### Response language
-- The response should be in the **user-selected language**.
+- The response should be in the **user-selected language** based on the user preference in the UI.
 - Citations may reference FR-only text even for EN responses.
 
 ### Translation policy
@@ -239,8 +239,8 @@ The admin UI must make it easy to:
 - If wrong/uncertain: returns not_found instead of guessing
 
 ### Override correctness
-- When a regional supplement overrides a known rule:
-  - answer should cite the regional supplement
+- When a regional supplement or/and a Quebec rules overrides a known rule:
+  - answer should cite the regional supplement or/and Quebec rule
   - base rule may be cited secondarily (Append/Clarify), or hidden for Override
 
 ---

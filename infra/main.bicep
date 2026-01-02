@@ -164,9 +164,12 @@ resource openAiService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
 }
 
 // Azure OpenAI Model Deployment
+// IMPORTANT: This deployment depends on the parent service being fully provisioned
+// Azure Cognitive Services can take 2-5 minutes to reach terminal state
 resource openAiDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: openAiService
   name: openAiDeploymentName
+  dependsOn: [ openAiService ]  // Explicit dependency to ensure parent is ready
   sku: {
     name: 'Standard'
     capacity: 20
