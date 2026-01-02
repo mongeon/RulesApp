@@ -19,9 +19,6 @@ param storageSku string = 'Standard_LRS'
 @description('Application name prefix')
 param appName string = 'rulesapp'
 
-@description('Deploy Azure OpenAI (optional, for chat AI enhancement)')
-param deployOpenAI bool = false
-
 @description('Azure OpenAI SKU')
 @allowed([
   'S0'
@@ -148,8 +145,8 @@ resource searchService 'Microsoft.Search/searchServices@2023-11-01' = {
   }
 }
 
-// Azure OpenAI Service (optional)
-resource openAiService 'Microsoft.CognitiveServices/accounts@2023-05-01' = if (deployOpenAI) {
+// Azure OpenAI Service
+resource openAiService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: '${appName}-openai-${environmentName}-${uniqueString(resourceGroup().id)}'
   location: openAiLocation
   kind: 'OpenAI'
@@ -166,8 +163,8 @@ resource openAiService 'Microsoft.CognitiveServices/accounts@2023-05-01' = if (d
   }
 }
 
-// Azure OpenAI Model Deployment (optional)
-resource openAiDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = if (deployOpenAI) {
+// Azure OpenAI Model Deployment
+resource openAiDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = {
   parent: openAiService
   name: openAiDeploymentName
   sku: {
@@ -208,14 +205,14 @@ output searchEndpoint string = 'https://${searchService.name}.search.windows.net
 @description('Search service admin key')
 output searchAdminKey string = searchService.listAdminKeys().primaryKey
 
-@description('Azure OpenAI service name (if deployed)')
-output openAiServiceName string = deployOpenAI ? openAiService.name : ''
+@description('Azure OpenAI service name')
+output openAiServiceName string = openAiService.name
 
-@description('Azure OpenAI endpoint (if deployed)')
-output openAiEndpoint string = deployOpenAI ? openAiService.properties.endpoint : ''
+@description('Azure OpenAI endpoint')
+output openAiEndpoint string = openAiService.properties.endpoint
 
-@description('Azure OpenAI key (if deployed)')
-output openAiKey string = deployOpenAI ? openAiService.listKeys().key1 : ''
+@description('Azure OpenAI key')
+output openAiKey string = openAiService.listKeys().key1
 
-@description('Azure OpenAI deployment name (if deployed)')
-output openAiDeploymentName string = deployOpenAI ? openAiDeployment.name : ''
+@description('Azure OpenAI deployment name')
+output openAiDeploymentName string = openAiDeployment.name

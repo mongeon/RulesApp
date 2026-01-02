@@ -108,7 +108,7 @@ public record ChatCitation(
 }
 ```
 
-**Note**: OpenAI configuration is optional. If not provided, chat will work in direct mode (no AI generation).
+**Note**: OpenAI configuration is required. The chat endpoint uses Azure OpenAI for AI-enhanced responses.
 
 ## API Examples
 
@@ -337,7 +337,7 @@ Comprehensive testing guide available in [docs/testing-milestone4.md](../docs/te
 ### Local Testing
 
 1. **Start Azurite** (storage emulator)
-2. **Update local.settings.json** with OpenAI credentials (optional)
+2. **Update local.settings.json** with OpenAI credentials (required)
 3. **Start Functions**:
    ```powershell
    cd src/RulesApp.Api

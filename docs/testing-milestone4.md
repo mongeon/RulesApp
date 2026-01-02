@@ -8,8 +8,11 @@ This guide walks through testing the chat/RAG endpoint with grounded answers and
    - PDFs uploaded and ingested
    - Azure AI Search indexed with rules
    - Precedence resolver working
-2. **Azure OpenAI resource** (optional for enhanced responses)
-   - Update `local.settings.json` with Azure OpenAI endpoint and key if using AI generation
+2. **Azure OpenAI resource** (required for AI-enhanced responses)
+   - OpenAI endpoint configured
+   - Deployment with gpt-4o-mini model (2024-07-18)
+   - API key available
+   - Update `local.settings.json` with Azure OpenAI credentials
 3. **Azurite running** (local storage emulator)
 4. **Functions running** (`func start` in `src/RulesApp.Api`)
 
@@ -28,12 +31,10 @@ This guide walks through testing the chat/RAG endpoint with grounded answers and
     "Search:IndexName": "rules-active",
     "OpenAI:Endpoint": "https://YOUR-OPENAI.openai.azure.com",
     "OpenAI:Key": "YOUR-OPENAI-KEY",
-    "OpenAI:DeploymentName": "gpt-4"
+    "OpenAI:DeploymentName": "gpt-4o-mini"
   }
 }
 ```
-
-**Note**: OpenAI configuration is optional. If not configured, the chat endpoint will return the retrieved context without AI enhancement.
 
 ## Test Steps
 
