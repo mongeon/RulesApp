@@ -16,6 +16,7 @@ public class RulesIngestWorker
     private readonly ITableStore _tableStore;
     private readonly IPdfExtractor _pdfExtractor;
     private readonly IChunker _chunker;
+    private readonly ISearchStore _searchStore;
 
     private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
     {
@@ -29,13 +30,15 @@ public class RulesIngestWorker
         IBlobStore blobStore,
         ITableStore tableStore,
         IPdfExtractor pdfExtractor,
-        IChunker chunker)
+        IChunker chunker,
+        ISearchStore searchStore)
     {
         _logger = logger;
         _blobStore = blobStore;
         _tableStore = tableStore;
         _pdfExtractor = pdfExtractor;
         _chunker = chunker;
+        _searchStore = searchStore;
     }
 
     [Function("RulesIngestWorker")]
@@ -102,6 +105,18 @@ public class RulesIngestWorker
 
             var chunksJson = JsonSerializer.Serialize(chunks, _jsonOptions);
             await _blobStore.UploadTextAsync(BlobPaths.GetIngestionChunksPath(jobId), chunksJson, ct);
+
+            // Index chunks to Azure AI Search
+            try
+            {
+                var indexed = await _searchStore.UpsertChunksAsync(message.SeasonId, message.AssociationId, message.DocType, chunks, ct);
+                _logger.LogInformation("[{jobId}] Indexed {count} chunks to search", jobId, indexed);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[{jobId}] Failed to index chunks (continuing anyway)", jobId);
+                // Continue - don't fail the job if indexing fails
+            }
 
             jobEntity.Status = IngestionStatus.Completed.ToString();
             jobEntity.CompletedAt = DateTimeOffset.UtcNow;

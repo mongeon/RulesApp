@@ -1,0 +1,75 @@
+{
+  "name": "rules-active",
+  "fields": [
+    {
+      "name": "chunkId",
+      "type": "Edm.String",
+      "key": true,
+      "searchable": false,
+      "filterable": false
+    },
+    {
+      "name": "seasonId",
+      "type": "Edm.String",
+      "filterable": true,
+      "facetable": true
+    },
+    {
+      "name": "associationId",
+      "type": "Edm.String",
+      "filterable": true,
+      "facetable": true
+    },
+    {
+      "name": "docType",
+      "type": "Edm.String",
+      "filterable": true,
+      "facetable": true
+    },
+    {
+      "name": "scope",
+      "type": "Edm.String",
+      "filterable": true,
+      "facetable": true
+    },
+    {
+      "name": "ruleKey",
+      "type": "Edm.String",
+      "searchable": true,
+      "filterable": true
+    },
+    {
+      "name": "ruleNumberText",
+      "type": "Edm.String",
+      "searchable": true
+    },
+    {
+      "name": "title",
+      "type": "Edm.String",
+      "searchable": true
+    },
+    {
+      "name": "text",
+      "type": "Edm.String",
+      "searchable": true
+    },
+    {
+      "name": "pageStart",
+      "type": "Edm.Int32",
+      "filterable": true
+    },
+    {
+      "name": "pageEnd",
+      "type": "Edm.Int32",
+      "filterable": true
+    },
+    {
+      "name": "textLength",
+      "type": "Edm.Int32",
+      "filterable": true
+    }
+  ],
+  "suggesters": [],
+  "scoringProfiles": [],
+  "corsOptions": null
+}
