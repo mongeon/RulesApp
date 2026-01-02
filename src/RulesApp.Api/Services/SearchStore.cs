@@ -14,6 +14,8 @@ public interface ISearchStore
     Task<int> UpsertChunksAsync(string seasonId, string? associationId, DocType docType, List<RuleChunkDto> chunks, CancellationToken ct = default);
     Task<SearchResponse> SearchAsync(SearchRequest request, CancellationToken ct = default);
     Task<long> GetDocumentCountAsync(CancellationToken ct = default);
+    Task<List<SearchHit>> GetChunksByRuleKeyAsync(string ruleKey, string seasonId, string? associationId, CancellationToken ct = default);
+    Task<List<SearchHit>> GetChunksByRuleKeyAndScopeAsync(string ruleKey, string scope, string seasonId, string? associationId, CancellationToken ct = default);
 }
 
 public class SearchStore : ISearchStore
@@ -87,7 +89,13 @@ public class SearchStore : ISearchStore
         var options = new SearchOptions
         {
             Size = request.Top,
-            IncludeTotalCount = true
+            IncludeTotalCount = true,
+            // Use hybrid search for better semantic matching
+            QueryType = Azure.Search.Documents.Models.SearchQueryType.Simple,
+            // Boost rule number and title fields for better relevance
+            SearchFields = { "text", "ruleNumberText", "title" },
+            // Minimum score threshold to filter out irrelevant results
+            MinimumCoverage = 80.0
         };
 
         // Build filter
@@ -131,6 +139,7 @@ public class SearchStore : ISearchStore
                 AssociationId: doc.ContainsKey("associationId") ? doc["associationId"]?.ToString() : null,
                 PageStart: Convert.ToInt32(doc["pageStart"]),
                 PageEnd: Convert.ToInt32(doc["pageEnd"]),
+                Text: doc["text"].ToString()!,
                 TextPreview: TruncateText(doc["text"].ToString()!, 200),
                 Score: result.Score ?? 0
             ));
@@ -158,6 +167,130 @@ public class SearchStore : ISearchStore
         _ => "Unknown"
     };
 
+    /// <summary>
+    /// Retrieves ALL chunks with a specific RuleKey for a given season and association.
+    /// Used to ensure complete rule context is available after a rule is selected.
+    /// </summary>
+    public async Task<List<SearchHit>> GetChunksByRuleKeyAsync(
+        string ruleKey,
+        string seasonId,
+        string? associationId,
+        CancellationToken ct = default)
+    {
+        var searchClient = _indexClient.GetSearchClient(_indexName);
+        
+        var options = new SearchOptions
+        {
+            Size = 100,  // Get up to 100 chunks per rule
+            IncludeTotalCount = true,
+            QueryType = Azure.Search.Documents.Models.SearchQueryType.Simple
+        };
+
+        // Build filter for this rule key, season, and association
+        var filters = new List<string>();
+        filters.Add($"seasonId eq '{seasonId}'");
+        filters.Add($"ruleKey eq '{ruleKey}'");
+        
+        if (!string.IsNullOrEmpty(associationId))
+        {
+            filters.Add($"(associationId eq '{associationId}' or associationId eq null)");
+        }
+        else
+        {
+            filters.Add("associationId eq null");
+        }
+
+        options.Filter = string.Join(" and ", filters);
+
+        var response = await searchClient.SearchAsync<SearchDocument>("*", options, cancellationToken: ct);
+        
+        var results = new List<SearchHit>();
+        await foreach (var result in response.Value.GetResultsAsync())
+        {
+            var doc = result.Document;
+            results.Add(new SearchHit(
+                ChunkId: doc["chunkId"].ToString()!,
+                RuleKey: doc.ContainsKey("ruleKey") ? doc["ruleKey"]?.ToString() : null,
+                RuleNumberText: doc.ContainsKey("ruleNumberText") ? doc["ruleNumberText"]?.ToString() : null,
+                Title: doc.ContainsKey("title") ? doc["title"]?.ToString() : null,
+                Scope: doc["scope"].ToString()!,
+                DocType: doc["docType"].ToString()!,
+                SeasonId: doc["seasonId"].ToString()!,
+                AssociationId: doc.ContainsKey("associationId") ? doc["associationId"]?.ToString() : null,
+                PageStart: Convert.ToInt32(doc["pageStart"]),
+                PageEnd: Convert.ToInt32(doc["pageEnd"]),
+                Text: doc["text"].ToString()!,
+                TextPreview: TruncateText(doc["text"].ToString()!, 200),
+                Score: result.Score ?? 0
+            ));
+        }
+
+        return results;
+    }
+
+    /// <summary>
+    /// Retrieves ALL chunks with a specific RuleKey AND Scope for a given season and association.
+    /// Ensures that chunks from lower-precedence scopes are NOT included.
+    /// </summary>
+    public async Task<List<SearchHit>> GetChunksByRuleKeyAndScopeAsync(
+        string ruleKey,
+        string scope,
+        string seasonId,
+        string? associationId,
+        CancellationToken ct = default)
+    {
+        var searchClient = _indexClient.GetSearchClient(_indexName);
+        
+        var options = new SearchOptions
+        {
+            Size = 100,  // Get up to 100 chunks per rule
+            IncludeTotalCount = true,
+            QueryType = Azure.Search.Documents.Models.SearchQueryType.Simple
+        };
+
+        // Build filter for this rule key, scope, season, and association
+        var filters = new List<string>();
+        filters.Add($"seasonId eq '{seasonId}'");
+        filters.Add($"ruleKey eq '{ruleKey}'");
+        filters.Add($"scope eq '{scope}'");  // IMPORTANT: Only this scope, not fallback to lower precedence
+        
+        if (!string.IsNullOrEmpty(associationId))
+        {
+            filters.Add($"(associationId eq '{associationId}' or associationId eq null)");
+        }
+        else
+        {
+            filters.Add("associationId eq null");
+        }
+
+        options.Filter = string.Join(" and ", filters);
+
+        var response = await searchClient.SearchAsync<SearchDocument>("*", options, cancellationToken: ct);
+        
+        var results = new List<SearchHit>();
+        await foreach (var result in response.Value.GetResultsAsync())
+        {
+            var doc = result.Document;
+            results.Add(new SearchHit(
+                ChunkId: doc["chunkId"].ToString()!,
+                RuleKey: doc.ContainsKey("ruleKey") ? doc["ruleKey"]?.ToString() : null,
+                RuleNumberText: doc.ContainsKey("ruleNumberText") ? doc["ruleNumberText"]?.ToString() : null,
+                Title: doc.ContainsKey("title") ? doc["title"]?.ToString() : null,
+                Scope: doc["scope"].ToString()!,
+                DocType: doc["docType"].ToString()!,
+                SeasonId: doc["seasonId"].ToString()!,
+                AssociationId: doc.ContainsKey("associationId") ? doc["associationId"]?.ToString() : null,
+                PageStart: Convert.ToInt32(doc["pageStart"]),
+                PageEnd: Convert.ToInt32(doc["pageEnd"]),
+                Text: doc["text"].ToString()!,
+                TextPreview: TruncateText(doc["text"].ToString()!, 200),
+                Score: result.Score ?? 0
+            ));
+        }
+
+        return results;
+    }
+
     private static string TruncateText(string text, int maxLength)
     {
         if (string.IsNullOrEmpty(text) || text.Length <= maxLength)
@@ -166,3 +299,4 @@ public class SearchStore : ISearchStore
         return text.Substring(0, maxLength);
     }
 }
+

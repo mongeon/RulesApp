@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using RulesApp.Api.Entities;
 using RulesApp.Api.Services;
 using RulesApp.Shared;
 using RulesApp.Shared.Helpers;
-using System.Text.Json;
 
 namespace RulesApp.Api.Functions;
 
@@ -25,18 +25,18 @@ public class AdminDebugInvokeWorker
     }
 
     [Function("AdminDebugInvokeWorker")]
-    public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/debug/invoke-worker")] HttpRequest req,
+    public async Task<HttpResponseData> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/debug/invoke-worker")] HttpRequestData req,
         CancellationToken ct)
     {
-        if (!req.Query.TryGetValue("jobId", out var jobIdValue))
-        {
-            return new BadRequestObjectResult(new { error = "Missing 'jobId' query parameter." });
-        }
-        var jobId = jobIdValue.ToString();
+        var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+        string? jobId = query["jobId"];
+        
         if (string.IsNullOrWhiteSpace(jobId))
         {
-            return new BadRequestObjectResult(new { error = "Missing 'jobId' query parameter." });
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = "Missing 'jobId' query parameter." });
+            return response;
         }
 
         _logger.LogInformation("Manually invoking worker for job {JobId}", jobId);
@@ -60,12 +60,16 @@ public class AdminDebugInvokeWorker
         try
         {
             await _worker.Run(json, ct);
-            return new OkObjectResult(new { message = "Worker invoked successfully", jobId });
+            var okResponse = req.CreateResponse(HttpStatusCode.OK);
+            await okResponse.WriteAsJsonAsync(new { message = "Worker invoked successfully", jobId });
+            return okResponse;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Worker invocation failed for job {JobId}", jobId);
-            return new ObjectResult(new { error = ex.Message, jobId }) { StatusCode = 500 };
+            var errResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await errResponse.WriteAsJsonAsync(new { error = ex.Message, jobId });
+            return errResponse;
         }
     }
 }

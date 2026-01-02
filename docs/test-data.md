@@ -35,7 +35,30 @@ This document lists the official rulebook PDF files used for testing and develop
 
 ---
 
-## Upload Commands
+## Setup Steps
+
+### 1. Create the Search Index (One-Time)
+
+**IMPORTANT:** Before uploading any PDFs, you must create the Azure AI Search index:
+
+```bash
+curl.exe -X POST http://localhost:7071/api/admin/index/create
+```
+
+Expected response:
+```json
+{
+  "message": "Index created/updated successfully",
+  "indexName": "rules-active"
+}
+```
+
+**Error if skipped:** If you upload PDFs without creating the index first, you'll get:
+```
+The index 'rules-active' was not found.
+```
+
+### 2. Upload PDFs
 
 The upload endpoint uses JSON with base64-encoded file content. Use the provided PowerShell helper script for easy uploads.
 
@@ -155,9 +178,14 @@ The upload endpoint accepts JSON with the following structure:
 
 ## Verification Commands
 
-After uploading, verify ingestion:
+After uploading, verify ingestion in this order:
 
-### Check latest job
+### 1. Create search index (if not already done)
+```bash
+curl.exe -X POST http://localhost:7071/api/admin/index/create
+```
+
+### 2. Check latest job
 ```powershell
 curl.exe http://localhost:7071/api/admin/jobs/latest
 ```

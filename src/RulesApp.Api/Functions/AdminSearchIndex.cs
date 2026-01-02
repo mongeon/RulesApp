@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using RulesApp.Api.Services;
 
@@ -18,8 +18,8 @@ public class AdminSearchIndex
     }
 
     [Function("AdminSearchIndex")]
-    public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/index/create")] HttpRequest req,
+    public async Task<HttpResponseData> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/index/create")] HttpRequestData req,
         CancellationToken ct)
     {
         try
@@ -30,16 +30,20 @@ public class AdminSearchIndex
             
             _logger.LogInformation("Search index created/updated successfully");
             
-            return new OkObjectResult(new 
+            var okResponse = req.CreateResponse(HttpStatusCode.OK);
+            await okResponse.WriteAsJsonAsync(new 
             { 
                 message = "Index created/updated successfully",
                 indexName = "rules-active"
             });
+            return okResponse;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Index creation failed");
-            return new ObjectResult(new { error = ex.Message }) { StatusCode = 500 };
+            var errResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await errResponse.WriteAsJsonAsync(new { error = ex.Message });
+            return errResponse;
         }
     }
 }

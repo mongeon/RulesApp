@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using RulesApp.Api.Services;
 
@@ -18,24 +18,28 @@ public class AdminSearchStats
     }
 
     [Function("AdminSearchStats")]
-    public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "api/admin/index/stats")] HttpRequest req,
+    public async Task<HttpResponseData> Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "api/admin/index/stats")] HttpRequestData req,
         CancellationToken ct)
     {
         try
         {
             var documentCount = await _searchStore.GetDocumentCountAsync(ct);
             
-            return new OkObjectResult(new 
+            var okResponse = req.CreateResponse(HttpStatusCode.OK);
+            await okResponse.WriteAsJsonAsync(new 
             { 
                 indexName = "rules-active",
                 documentCount = documentCount
             });
+            return okResponse;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to get search statistics");
-            return new ObjectResult(new { error = ex.Message }) { StatusCode = 500 };
+            var errResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await errResponse.WriteAsJsonAsync(new { error = ex.Message });
+            return errResponse;
         }
     }
 }

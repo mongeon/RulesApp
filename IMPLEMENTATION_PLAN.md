@@ -115,12 +115,25 @@ Testing:
 ## Milestone 4 — Chat (RAG) with strict citations
 Goal: grounded answers only.
 
-- [ ] POST /api/chat
+- [x] Add Azure OpenAI to infrastructure (main.bicep)
+- [x] Create ChatService with retrieval + precedence + citation validation
+- [x] POST /api/chat endpoint
   - retrieves topK candidates
   - precedence collapse
   - calls Azure OpenAI (optional)
   - validates citations refer to retrieved chunkIds
   - returns ok or not_found
+- [x] Add chat DTOs to Shared/Models.cs
+- [x] Create testing-milestone4.md guide
+
+Acceptance:
+- Chat returns grounded answers with citations
+- "not_found" status when no relevant context
+- All citations include chunkId, ruleKey, page numbers
+- No hallucinated rules
+
+Testing:
+- See [docs/testing-milestone4.md](docs/testing-milestone4.md) for comprehensive testing guide
 3) Prompt snippets to use with Copilot Agent (copy/paste)
 A) “Bootstrap milestone 0”
 sql

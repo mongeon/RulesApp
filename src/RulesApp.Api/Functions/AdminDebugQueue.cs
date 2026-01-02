@@ -1,11 +1,11 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using Azure.Storage.Queues;
 using Azure.Storage.Queues.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
 namespace RulesApp.Api.Functions;
@@ -22,18 +22,18 @@ public class AdminDebugQueue
     }
 
     [Function("AdminDebugQueueGet")]
-    public async Task<IActionResult> Get(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/debug/queue")] HttpRequest req,
+    public async Task<HttpResponseData> Get(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/debug/queue")] HttpRequestData req,
         CancellationToken ct)
     {
-        if (!req.Query.TryGetValue("name", out var nameValue))
-        {
-            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
-        }
-        var name = nameValue.ToString();
+        var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+        string? name = query["name"];
+        
         if (string.IsNullOrWhiteSpace(name))
         {
-            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = "Missing 'name' query parameter." });
+            return response;
         }
 
         var queue = _queueServiceClient.GetQueueClient(name);
@@ -47,32 +47,33 @@ public class AdminDebugQueue
 
         _logger.LogInformation("Queue {QueueName}: approx {Count} messages; peeked {Peeked}", name, approxCount, messages.Length);
 
-        return new OkObjectResult(new
+        var okResponse = req.CreateResponse(HttpStatusCode.OK);
+        await okResponse.WriteAsJsonAsync(new
         {
             name,
             approximateMessages = approxCount,
             peekedCount = messages.Length,
             messages
         });
+        return okResponse;
     }
 
     [Function("AdminDebugQueueReceive")]
-    public async Task<IActionResult> Receive(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/debug/queue/receive")] HttpRequest req,
+    public async Task<HttpResponseData> Receive(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/debug/queue/receive")] HttpRequestData req,
         CancellationToken ct)
     {
-        if (!req.Query.TryGetValue("name", out var nameValue))
-        {
-            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
-        }
-        var name = nameValue.ToString();
+        var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+        string? name = query["name"];
         
-        var maxStr = req.Query.TryGetValue("max", out var maxValue) ? maxValue.ToString() : "1";
+        var maxStr = query["max"] ?? "1";
         var max = int.TryParse(maxStr, out var maxParsed) ? Math.Clamp(maxParsed, 1, 32) : 1;
 
         if (string.IsNullOrWhiteSpace(name))
         {
-            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = "Missing 'name' query parameter." });
+            return response;
         }
 
         var queue = _queueServiceClient.GetQueueClient(name);
@@ -164,7 +165,8 @@ public class AdminDebugQueue
         }
 
         _logger.LogInformation("Received {Count} messages from {QueueName}; peekMain {PeekMainCount}; poison approx {PoisonCount}", items.Count, name, mainPeekMessages.Length, poisonApprox);
-        return new OkObjectResult(new
+        var okResponse = req.CreateResponse(HttpStatusCode.OK);
+        await okResponse.WriteAsJsonAsync(new
         {
             name,
             count = items.Count,
@@ -189,23 +191,23 @@ public class AdminDebugQueue
                 peek = peekErrors
             }
         });
+        return okResponse;
     }
 
     [Function("AdminDebugQueueClear")]
-    public async Task<IActionResult> Clear(
-        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "api/admin/debug/queue")] HttpRequest req,
+    public async Task<HttpResponseData> Clear(
+        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "api/admin/debug/queue")] HttpRequestData req,
         CancellationToken ct)
     {
-        if (!req.Query.TryGetValue("name", out var nameValue))
-        {
-            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
-        }
-        var name = nameValue.ToString();
-        var drop = req.Query.TryGetValue("drop", out var dropValue) && bool.TryParse(dropValue, out var d) && d;
+        var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+        string? name = query["name"];
+        var drop = query["drop"] != null && bool.TryParse(query["drop"], out var d) && d;
         
         if (string.IsNullOrWhiteSpace(name))
         {
-            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = "Missing 'name' query parameter." });
+            return response;
         }
 
         var queue = _queueServiceClient.GetQueueClient(name);
@@ -221,28 +223,31 @@ public class AdminDebugQueue
             await queue.DeleteIfExistsAsync(cancellationToken: ct);
             await poison.DeleteIfExistsAsync(cancellationToken: ct);
             _logger.LogWarning("Deleted queues {Queue} and {Poison}", name, poison.Name);
-            return new OkObjectResult(new { name, poison = poison.Name, cleared = true, dropped = true });
+            var dropResponse = req.CreateResponse(HttpStatusCode.OK);
+            await dropResponse.WriteAsJsonAsync(new { name, poison = poison.Name, cleared = true, dropped = true });
+            return dropResponse;
         }
 
         _logger.LogInformation("Cleared all messages in queue {QueueName} and poison {Poison}", name, poison.Name);
-        return new OkObjectResult(new { name, poison = poison.Name, cleared = true, dropped = false });
+        var clearResponse = req.CreateResponse(HttpStatusCode.OK);
+        await clearResponse.WriteAsJsonAsync(new { name, poison = poison.Name, cleared = true, dropped = false });
+        return clearResponse;
     }
 
     [Function("AdminDebugQueueSend")]
-    public async Task<IActionResult> Send(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/debug/queue/send")] HttpRequest req,
+    public async Task<HttpResponseData> Send(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/debug/queue/send")] HttpRequestData req,
         CancellationToken ct)
     {
-        if (!req.Query.TryGetValue("name", out var nameValue))
-        {
-            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
-        }
-        var name = nameValue.ToString();
-        var body = req.Query.TryGetValue("body", out var bodyValue) ? bodyValue.ToString() : "test-message";
+        var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+        string? name = query["name"];
+        var body = query["body"] ?? "test-message";
         
         if (string.IsNullOrWhiteSpace(name))
         {
-            return new BadRequestObjectResult(new { error = "Missing 'name' query parameter." });
+            var response = req.CreateResponse(HttpStatusCode.BadRequest);
+            await response.WriteAsJsonAsync(new { error = "Missing 'name' query parameter." });
+            return response;
         }
         if (string.IsNullOrEmpty(body))
         {
@@ -254,7 +259,8 @@ public class AdminDebugQueue
         var receipt = await queue.SendMessageAsync(body, cancellationToken: ct);
 
         _logger.LogInformation("Sent debug message to {Queue}: id {Id}", name, receipt.Value.MessageId);
-        return new OkObjectResult(new
+        var okResponse = req.CreateResponse(HttpStatusCode.OK);
+        await okResponse.WriteAsJsonAsync(new
         {
             name,
             messageId = receipt.Value.MessageId,
@@ -262,5 +268,7 @@ public class AdminDebugQueue
             expirationTime = receipt.Value.ExpirationTime,
             timeNextVisible = receipt.Value.TimeNextVisible
         });
+        return okResponse;
     }
 }
+
