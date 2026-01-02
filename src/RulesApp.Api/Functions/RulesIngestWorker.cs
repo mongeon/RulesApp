@@ -17,6 +17,7 @@ public class RulesIngestWorker
     private readonly IPdfExtractor _pdfExtractor;
     private readonly IChunker _chunker;
     private readonly ISearchStore _searchStore;
+    private readonly OverrideDetector _overrideDetector;
 
     private static readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
     {
@@ -31,7 +32,8 @@ public class RulesIngestWorker
         ITableStore tableStore,
         IPdfExtractor pdfExtractor,
         IChunker chunker,
-        ISearchStore searchStore)
+        ISearchStore searchStore,
+        OverrideDetector overrideDetector)
     {
         _logger = logger;
         _blobStore = blobStore;
@@ -39,6 +41,7 @@ public class RulesIngestWorker
         _pdfExtractor = pdfExtractor;
         _chunker = chunker;
         _searchStore = searchStore;
+        _overrideDetector = overrideDetector;
     }
 
     [Function("RulesIngestWorker")]
@@ -105,6 +108,52 @@ public class RulesIngestWorker
 
             var chunksJson = JsonSerializer.Serialize(chunks, _jsonOptions);
             await _blobStore.UploadTextAsync(BlobPaths.GetIngestionChunksPath(jobId), chunksJson, ct);
+
+            // Detect potential overrides
+            try
+            {
+                _logger.LogInformation("[{jobId}] Detecting potential overrides...", jobId);
+                var proposals = _overrideDetector.DetectOverrides(chunks, message.SeasonId, message.AssociationId);
+                
+                if (proposals.Count > 0)
+                {
+                    _logger.LogInformation("[{jobId}] Detected {count} potential overrides", jobId, proposals.Count);
+                    
+                    // Store proposals in OverrideMappings table
+                    foreach (var proposal in proposals)
+                    {
+                        var mappingId = Guid.NewGuid().ToString();
+                        var mappingEntity = new OverrideMappingEntity
+                        {
+                            PartitionKey = partitionKey,
+                            RowKey = mappingId,
+                            SeasonId = message.SeasonId,
+                            AssociationId = message.AssociationId,
+                            SourceRuleKey = proposal.SourceRuleKey,
+                            SourceChunkId = proposal.SourceChunkId,
+                            SourceScope = proposal.SourceScope,
+                            TargetRuleKey = proposal.TargetRuleKey,
+                            TargetChunkId = proposal.TargetChunkId,
+                            TargetScope = proposal.TargetScope,
+                            Status = OverrideStatus.Proposed.ToString(),
+                            Confidence = proposal.Confidence,
+                            DetectionReason = proposal.DetectionReason,
+                            CreatedAt = DateTimeOffset.UtcNow
+                        };
+                        
+                        await _tableStore.UpsertEntityAsync("OverrideMappings", mappingEntity, ct);
+                    }
+                }
+                else
+                {
+                    _logger.LogInformation("[{jobId}] No overrides detected", jobId);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[{jobId}] Failed to detect overrides (continuing anyway)", jobId);
+                // Continue - don't fail the job if override detection fails
+            }
 
             // Index chunks to Azure AI Search
             try

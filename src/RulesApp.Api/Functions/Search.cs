@@ -11,6 +11,7 @@ namespace RulesApp.Api.Functions;
 public class Search
 {
     private readonly ISearchStore _searchStore;
+    private readonly PrecedenceResolver _precedenceResolver;
     private readonly ILogger<Search> _logger;
     
     private static readonly JsonSerializerOptions _jsonOptions = new()
@@ -18,15 +19,16 @@ public class Search
         PropertyNameCaseInsensitive = true
     };
 
-    public Search(ISearchStore searchStore, ILogger<Search> logger)
+    public Search(ISearchStore searchStore, PrecedenceResolver precedenceResolver, ILogger<Search> logger)
     {
         _searchStore = searchStore;
+        _precedenceResolver = precedenceResolver;
         _logger = logger;
     }
 
     [Function("Search")]
     public async Task<HttpResponseData> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "search")] HttpRequestData req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "api/search")] HttpRequestData req,
         CancellationToken ct)
     {
         try
@@ -81,9 +83,38 @@ public class Search
             _logger.LogInformation("Searching: query={Query}, scopes={Scopes}, association={Association}", 
                 request.Query, request.Scopes != null ? string.Join(",", request.Scopes) : "all", request.AssociationId);
 
-            var response = await _searchStore.SearchAsync(request, ct);
+            var searchResponse = await _searchStore.SearchAsync(request, ct);
             
-            _logger.LogInformation("Search completed: {Count} results", response.TotalResults);
+            _logger.LogInformation("Search completed: {Count} raw results", searchResponse.TotalResults);
+
+            // Apply precedence resolution to group by ruleKey
+            var seasonId = request.SeasonId ?? "2025"; // TODO: get from active season
+            var precedenceGroups = await _precedenceResolver.ResolveAsync(
+                searchResponse.Results, 
+                seasonId, 
+                request.AssociationId);
+
+            _logger.LogInformation("Precedence resolved: {GroupCount} rule groups", precedenceGroups.Count);
+
+            // Build response with precedence groups
+            var ruleGroups = precedenceGroups.Select(g => new RuleGroupResult(
+                g.RuleKey,
+                g.PrimaryChunk,
+                g.AlternateChunks.ToList()
+            )).ToList();
+
+            var ungroupedResults = searchResponse.Results
+                .Where(r => string.IsNullOrEmpty(r.RuleKey))
+                .ToList();
+
+            var response = new SearchResponseWithPrecedence(
+                request.Query,
+                searchResponse.TotalResults,
+                ruleGroups,
+                ungroupedResults
+            );
+            
+            _logger.LogInformation("Response prepared with precedence groups");
             
             var okResponse = req.CreateResponse(HttpStatusCode.OK);
             await okResponse.WriteAsJsonAsync(response);

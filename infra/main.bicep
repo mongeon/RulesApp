@@ -97,7 +97,9 @@ resource tableService 'Microsoft.Storage/storageAccounts/tableServices@2023-01-0
 
 // Tables
 resource tablesDefinition 'Microsoft.Storage/storageAccounts/tableServices/tables@2023-01-01' = [for tableName in [
-  'IngestJobs'
+  'IngestionJobs'
+  'SeasonState'
+  'OverrideMappings'
   'Seasons'
   'Associations'
 ]: {

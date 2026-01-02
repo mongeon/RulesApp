@@ -1,7 +1,7 @@
+using System.Net;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using RulesApp.Api.Entities;
 using RulesApp.Api.Services;
@@ -22,13 +22,15 @@ public class AdminJobsLatest
     }
 
     [Function("AdminJobsLatest")]
-    public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/jobs/latest")] HttpRequest req,
+    public async Task<HttpResponseData> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/jobs/latest")] HttpRequestData req,
         CancellationToken ct)
     {
         try
         {
-            var associationId = req.Query["associationId"].ToString();
+            var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+            string? associationId = query["associationId"];
+            
             if (string.IsNullOrEmpty(associationId))
             {
                 associationId = "GLOBAL";
@@ -61,17 +63,21 @@ public class AdminJobsLatest
                     errorMessage = j.ErrorMessage
                 });
             
-            return new OkObjectResult(new
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(new
             {
                 seasonId,
                 associationId = associationId == "GLOBAL" ? null : associationId,
                 jobs = results
             });
+            return response;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting latest jobs");
-            return new StatusCodeResult(500);
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
         }
     }
 }

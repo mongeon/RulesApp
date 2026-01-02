@@ -99,13 +99,16 @@ Testing:
 ## Milestone 3 — Precedence + override proposals
 Goal: effective context and admin mapping.
 
-- [ ] Implement PrecedenceResolver
-- [ ] Implement heuristic override detection -> proposals into OverrideMappings (Proposed)
-- [ ] Admin UI to confirm/reject and pick target RuleKey using RuleKeyPicker
-- [ ] Apply confirmed overrides in precedence stage
+- [x] Implement PrecedenceResolver
+- [x] Implement heuristic override detection -> proposals into OverrideMappings (Proposed)
+- [x] Admin endpoints to list/confirm/reject override proposals
+- [x] Apply confirmed overrides in precedence stage
 
 Acceptance:
 - Confirmed override changes which chunk is primary for a ruleKey
+
+Testing:
+- See [docs/testing-milestone3.md](docs/testing-milestone3.md) for comprehensive testing guide
 
 ---
 

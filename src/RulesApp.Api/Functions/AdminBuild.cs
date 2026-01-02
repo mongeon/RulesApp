@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using RulesApp.Api.Entities;
 using RulesApp.Api.Services;
 using RulesApp.Shared;
 using RulesApp.Shared.Helpers;
+using System.Net;
 
 namespace RulesApp.Api.Functions;
 
@@ -29,13 +29,15 @@ public class AdminBuild
     }
 
     [Function("AdminBuild")]
-    public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/build")] HttpRequest req,
+    public async Task<HttpResponseData> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "api/admin/build")] HttpRequestData req,
         CancellationToken ct)
     {
         try
         {
-            var associationId = req.Query["associationId"].ToString();
+            var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+            string? associationId = query["associationId"];
+            
             if (string.IsNullOrEmpty(associationId))
             {
                 associationId = null;
@@ -51,7 +53,7 @@ public class AdminBuild
             var enqueuedJobs = new List<object>();
             
             // Enqueue global docs (always)
-            var globalDocs = new[] { DocType.CanadaFr, DocType.CanadaEn, DocType.QuebecFr };
+            var globalDocs = new[] { DocType.CanadaFr, DocType.CanadaEn, DocType.QuebecFr, DocType.QuebecEn };
             foreach (var docType in globalDocs)
             {
                 var blobPath = BlobPaths.GetRulesPdfPath(seasonId, null, docType);
@@ -144,7 +146,8 @@ public class AdminBuild
                 }
             }
             
-            return new OkObjectResult(new
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(new
             {
                 message = "Build started",
                 seasonId,
@@ -152,11 +155,14 @@ public class AdminBuild
                 enqueuedJobs = enqueuedJobs.Count,
                 jobs = enqueuedJobs
             });
+            return response;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error starting build");
-            return new StatusCodeResult(500);
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
         }
     }
 }

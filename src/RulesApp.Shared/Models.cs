@@ -6,6 +6,7 @@ public enum DocType
     CanadaFr,
     CanadaEn,
     QuebecFr,
+    QuebecEn,
     RegionalFr
 }
 
@@ -28,6 +29,13 @@ public enum IngestionStatus
     InProgress,
     Completed,
     Failed
+}
+
+public enum OverrideStatus
+{
+    Proposed,
+    Confirmed,
+    Rejected
 }
 
 // Queue message for ingestion
@@ -93,6 +101,19 @@ public record SearchResponse(
     List<SearchHit> Results
 );
 
+public record SearchResponseWithPrecedence(
+    string Query,
+    int TotalResults,
+    List<RuleGroupResult> RuleGroups,
+    List<SearchHit> UngroupedResults
+);
+
+public record RuleGroupResult(
+    string RuleKey,
+    SearchHit PrimaryChunk,
+    List<SearchHit> AlternateChunks
+);
+
 public record SearchHit(
     string ChunkId,
     string? RuleKey,
@@ -107,3 +128,48 @@ public record SearchHit(
     string TextPreview,
     double Score
 );
+
+// Override management DTOs
+public record OverrideMappingDto(
+    string MappingId,
+    string SeasonId,
+    string? AssociationId,
+    string SourceRuleKey,
+    string SourceChunkId,
+    string SourceScope,
+    string TargetRuleKey,
+    string TargetChunkId,
+    string TargetScope,
+    OverrideStatus Status,
+    double Confidence,
+    string? DetectionReason,
+    DateTimeOffset CreatedAt,
+    DateTimeOffset? ReviewedAt,
+    string? ReviewedBy,
+    string? RejectionReason
+);
+
+public record OverrideReviewRequest(
+    string Action, // "confirm" or "reject"
+    string ReviewedBy,
+    string? Reason = null
+);
+
+public record OverrideProposal(
+    string SourceRuleKey,
+    string SourceChunkId,
+    string SourceScope,
+    string TargetRuleKey,
+    string TargetChunkId,
+    string TargetScope,
+    double Confidence,
+    string DetectionReason
+);
+
+// Precedence-resolved result
+public record PrecedenceGroup(
+    string RuleKey,
+    SearchHit PrimaryChunk,
+    List<SearchHit> AlternateChunks
+);
+
