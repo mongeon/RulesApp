@@ -1,8 +1,8 @@
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using RulesApp.Api.Services;
 using RulesApp.Shared;
@@ -31,31 +31,30 @@ public class AdminDebugChunk
     }
 
     [Function("AdminDebugChunk")]
-    public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/debug/chunk")] HttpRequest req,
+    public async Task<HttpResponseData> Run(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "api/admin/debug/chunk")] HttpRequestData req,
         CancellationToken ct)
     {
         try
         {
-            if (!req.Query.TryGetValue("jobId", out var jobIdValue) ||
-                !req.Query.TryGetValue("chunkId", out var chunkIdValue))
-            {
-                return new BadRequestObjectResult(new { error = "jobId and chunkId are required" });
-            }
-            
-            var jobId = jobIdValue.ToString();
-            var chunkId = chunkIdValue.ToString();
+            var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
+            string? jobId = query["jobId"];
+            string? chunkId = query["chunkId"];
             
             if (string.IsNullOrEmpty(jobId) || string.IsNullOrEmpty(chunkId))
             {
-                return new BadRequestObjectResult(new { error = "jobId and chunkId are required" });
+                var response = req.CreateResponse(HttpStatusCode.BadRequest);
+                await response.WriteAsJsonAsync(new { error = "jobId and chunkId are required" });
+                return response;
             }
             
             var chunksBlobPath = BlobPaths.GetIngestionChunksPath(jobId);
             
             if (!await _blobStore.ExistsAsync(chunksBlobPath, ct))
             {
-                return new NotFoundObjectResult(new { error = "Chunks not found for this jobId" });
+                var response = req.CreateResponse(HttpStatusCode.NotFound);
+                await response.WriteAsJsonAsync(new { error = "Chunks not found for this jobId" });
+                return response;
             }
             
             using var stream = await _blobStore.GetBlobAsync(chunksBlobPath, ct);
@@ -67,15 +66,21 @@ public class AdminDebugChunk
             
             if (chunk == null)
             {
-                return new NotFoundObjectResult(new { error = "Chunk not found" });
+                var response = req.CreateResponse(HttpStatusCode.NotFound);
+                await response.WriteAsJsonAsync(new { error = "Chunk not found" });
+                return response;
             }
             
-            return new OkObjectResult(chunk);
+            var okResponse = req.CreateResponse(HttpStatusCode.OK);
+            await okResponse.WriteAsJsonAsync(chunk);
+            return okResponse;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting chunk");
-            return new StatusCodeResult(500);
+            var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+            await response.WriteAsJsonAsync(new { error = ex.Message });
+            return response;
         }
     }
 }
