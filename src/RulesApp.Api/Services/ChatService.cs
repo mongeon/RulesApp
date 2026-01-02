@@ -46,7 +46,7 @@ public class ChatService : IChatService
             SeasonId: request.SeasonId,
             AssociationId: request.AssociationId,
             Scopes: null, // Search all scopes
-            Top: 20 // Retrieve more for precedence grouping
+            Top: 15 // Retrieve top candidates for precision
         );
 
         var searchResults = await _searchStore.SearchAsync(searchRequest, cancellationToken);
@@ -63,9 +63,27 @@ public class ChatService : IChatService
             );
         }
 
+        // Filter by minimum relevance score (keep only results with score > 1.0)
+        // This ensures we only use results with meaningful keyword matches
+        var relevantResults = searchResults.Results
+            .Where(r => r.Score > 1.0)
+            .ToList();
+
+        if (relevantResults.Count == 0)
+        {
+            return new ChatResponse(
+                Status: "not_found",
+                Query: request.Query,
+                Answer: "No sufficiently relevant rules found in the provided rulebooks. Please try rephrasing your question with different keywords.",
+                Citations: new List<ChatCitation>(),
+                ContextUsed: 0,
+                TotalRetrieved: searchResults.TotalResults
+            );
+        }
+
         // 2. Apply precedence resolution
         var precedenceGroups = await _precedenceResolver.ResolveAsync(
-            searchResults.Results,
+            relevantResults,
             request.SeasonId ?? "2025",
             request.AssociationId
         );
@@ -87,8 +105,9 @@ public class ChatService : IChatService
                 .SelectMany(g => new[] { g.PrimaryChunk.ChunkId }.Concat(g.AlternateChunks.Select(c => c.ChunkId)))
                 .ToHashSet();
             
-            var ungrouped = searchResults.Results
+            var ungrouped = relevantResults
                 .Where(h => !groupedChunkIds.Contains(h.ChunkId))
+                .OrderByDescending(h => h.Score) // Prioritize higher-scoring ungrouped results
                 .Take(remainingSlots);
             
             contextChunks.AddRange(ungrouped);
@@ -178,32 +197,37 @@ public class ChatService : IChatService
             return GenerateDirectAnswer(contextChunks);
         }
 
-        // Build context string
+        // Build context string with relevance indicators
         var contextBuilder = new StringBuilder();
-        foreach (var chunk in contextChunks)
+        var orderedChunks = contextChunks.OrderByDescending(c => c.Score).ToList();
+        for (int i = 0; i < orderedChunks.Count; i++)
         {
+            var chunk = orderedChunks[i];
             var ruleId = chunk.RuleNumberText ?? chunk.RuleKey ?? "N/A";
-            contextBuilder.AppendLine($"Rule {ruleId} ({chunk.Scope}, Page {chunk.PageStart}):");
+            var relevanceIndicator = i == 0 ? "[MOST RELEVANT]" : i < 3 ? "[HIGH RELEVANCE]" : "[REFERENCE]";
+            contextBuilder.AppendLine($"{relevanceIndicator} Rule {ruleId} ({chunk.Scope}, Page {chunk.PageStart}, Score: {chunk.Score:F2}):");
             contextBuilder.AppendLine(chunk.TextPreview);
             contextBuilder.AppendLine();
         }
 
-        // Build prompt
+        // Build prompt with better instructions
         var systemPrompt = @"You are a baseball rules assistant. Answer questions strictly based on the provided rule context.
 CRITICAL REQUIREMENTS:
-1. Only use information from the provided context
-2. Always cite rule numbers and page numbers
-3. If the context doesn't contain enough information, say so
-4. Never invent or assume rules
-5. Answer in the same language as the question
-6. Be concise but complete";
+1. PRIORITIZE rules marked as [MOST RELEVANT] and [HIGH RELEVANCE] - these are the best matches for the user's question
+2. Only use information from the provided context
+3. Always cite rule numbers and page numbers
+4. If the context doesn't contain enough information, say so
+5. Never invent or assume rules
+6. Answer in the same language as the question
+7. Be concise but complete
+8. Focus on the most relevant rules rather than mentioning all provided rules";
 
-        var userPrompt = $@"Context from official rulebooks:
+        var userPrompt = $@"Context from official rulebooks (ordered by relevance):
 {contextBuilder}
 
 Question: {query}
 
-Answer the question based ONLY on the context above. Include rule numbers and page references in your answer.";
+Answer the question based ONLY on the context above, PRIORITIZING the most relevant rules. Include rule numbers and page references in your answer.";
 
         var requestBody = new
         {

@@ -87,7 +87,13 @@ public class SearchStore : ISearchStore
         var options = new SearchOptions
         {
             Size = request.Top,
-            IncludeTotalCount = true
+            IncludeTotalCount = true,
+            // Use hybrid search for better semantic matching
+            QueryType = Azure.Search.Documents.Models.SearchQueryType.Simple,
+            // Boost rule number and title fields for better relevance
+            SearchFields = { "text", "ruleNumberText", "title" },
+            // Minimum score threshold to filter out irrelevant results
+            MinimumCoverage = 80.0
         };
 
         // Build filter
