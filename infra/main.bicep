@@ -19,6 +19,27 @@ param storageSku string = 'Standard_LRS'
 @description('Application name prefix')
 param appName string = 'rulesapp'
 
+@description('Deploy Azure OpenAI (optional, for chat AI enhancement)')
+param deployOpenAI bool = false
+
+@description('Azure OpenAI SKU')
+@allowed([
+  'S0'
+])
+param openAiSku string = 'S0'
+
+@description('Azure OpenAI model deployment name')
+param openAiDeploymentName string = 'gpt-4o-mini'
+
+@description('Azure OpenAI location (must support OpenAI)')
+param openAiLocation string = 'eastus2'
+
+@description('Azure OpenAI model name')
+param openAiModelName string = 'gpt-4o-mini'
+
+@description('Azure OpenAI model version')
+param openAiModelVersion string = '2024-07-18'
+
 // Generate unique storage account name (3-24 chars, lowercase alphanumeric only)
 var storageAccountName = toLower('${appName}${environmentName}${uniqueString(resourceGroup().id)}')
 
@@ -127,6 +148,41 @@ resource searchService 'Microsoft.Search/searchServices@2023-11-01' = {
   }
 }
 
+// Azure OpenAI Service (optional)
+resource openAiService 'Microsoft.CognitiveServices/accounts@2023-05-01' = if (deployOpenAI) {
+  name: '${appName}-openai-${environmentName}-${uniqueString(resourceGroup().id)}'
+  location: openAiLocation
+  kind: 'OpenAI'
+  sku: {
+    name: openAiSku
+  }
+  properties: {
+    customSubDomainName: '${appName}-openai-${environmentName}-${uniqueString(resourceGroup().id)}'
+    publicNetworkAccess: 'Enabled'
+  }
+  tags: {
+    Environment: environmentName
+    Application: 'RulesApp'
+  }
+}
+
+// Azure OpenAI Model Deployment (optional)
+resource openAiDeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = if (deployOpenAI) {
+  parent: openAiService
+  name: openAiDeploymentName
+  sku: {
+    name: 'Standard'
+    capacity: 20
+  }
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: openAiModelName
+      version: openAiModelVersion
+    }
+  }
+}
+
 // Outputs
 @description('Storage account name')
 output storageAccountName string = storageAccount.name
@@ -151,3 +207,15 @@ output searchEndpoint string = 'https://${searchService.name}.search.windows.net
 
 @description('Search service admin key')
 output searchAdminKey string = searchService.listAdminKeys().primaryKey
+
+@description('Azure OpenAI service name (if deployed)')
+output openAiServiceName string = deployOpenAI ? openAiService.name : ''
+
+@description('Azure OpenAI endpoint (if deployed)')
+output openAiEndpoint string = deployOpenAI ? openAiService.properties.endpoint : ''
+
+@description('Azure OpenAI key (if deployed)')
+output openAiKey string = deployOpenAI ? openAiService.listKeys().key1 : ''
+
+@description('Azure OpenAI deployment name (if deployed)')
+output openAiDeploymentName string = deployOpenAI ? openAiDeployment.name : ''

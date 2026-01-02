@@ -173,3 +173,35 @@ public record PrecedenceGroup(
     List<SearchHit> AlternateChunks
 );
 
+// Chat DTOs
+public record ChatRequest(
+    string Query,
+    string? SeasonId = null,
+    string? AssociationId = null,
+    int MaxContext = 5,
+    bool UseAI = false
+);
+
+public record ChatResponse(
+    string Status, // "ok" or "not_found"
+    string Query,
+    string Answer,
+    List<ChatCitation> Citations,
+    int ContextUsed,
+    int TotalRetrieved
+);
+
+public record ChatCitation(
+    string ChunkId,
+    string? RuleKey,
+    string? RuleNumberText,
+    string? Title,
+    string Scope,
+    string DocType,
+    string SeasonId,
+    string? AssociationId,
+    int PageStart,
+    int PageEnd,
+    string TextPreview
+);
+

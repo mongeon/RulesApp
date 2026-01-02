@@ -54,6 +54,24 @@ var searchIndexName = builder.Configuration["Search:IndexName"]
 
 builder.Services.AddSingleton<ISearchStore>(new SearchStore(searchEndpoint, searchAdminKey, searchIndexName));
 
+// Azure OpenAI (optional for chat enhancement)
+var openAiEndpoint = builder.Configuration["OpenAI:Endpoint"]
+    ?? Environment.GetEnvironmentVariable("OpenAI:Endpoint");
+var openAiKey = builder.Configuration["OpenAI:Key"]
+    ?? Environment.GetEnvironmentVariable("OpenAI:Key");
+var openAiDeploymentName = builder.Configuration["OpenAI:DeploymentName"]
+    ?? Environment.GetEnvironmentVariable("OpenAI:DeploymentName")
+    ?? "gpt-4";
+
+builder.Services.AddSingleton<IChatService>(sp =>
+    new ChatService(
+        sp.GetRequiredService<ISearchStore>(),
+        sp.GetRequiredService<PrecedenceResolver>(),
+        openAiEndpoint,
+        openAiKey,
+        openAiDeploymentName
+    ));
+
 // Worker (for manual invocation testing)
 builder.Services.AddSingleton<RulesIngestWorker>();
 
