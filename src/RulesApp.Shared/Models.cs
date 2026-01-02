@@ -77,3 +77,33 @@ public record IngestionResultDto(
     DateTimeOffset? CompletedAt,
     string? ErrorMessage
 );
+
+// Search DTOs
+public record SearchRequest(
+    string Query,
+    string? SeasonId = null,
+    string? AssociationId = null,
+    List<string>? Scopes = null, // "Canada", "Quebec", "Regional"
+    int Top = 10
+);
+
+public record SearchResponse(
+    string Query,
+    int TotalResults,
+    List<SearchHit> Results
+);
+
+public record SearchHit(
+    string ChunkId,
+    string? RuleKey,
+    string? RuleNumberText,
+    string? Title,
+    string Scope,
+    string DocType,
+    string SeasonId,
+    string? AssociationId,
+    int PageStart,
+    int PageEnd,
+    string TextPreview,
+    double Score
+);

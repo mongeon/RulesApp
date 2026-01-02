@@ -1,0 +1,176 @@
+@page "/search"
+@using RulesApp.Shared
+@inject HttpClient Http
+
+<PageTitle>Recherche - RulesApp</PageTitle>
+
+<h1>Recherche de règlements</h1>
+
+<div class="search-container">
+    <div class="search-box mb-3">
+        <input type="text" 
+               @bind="query" 
+               @bind:event="oninput"
+               @onkeypress="HandleKeyPress"
+               placeholder="Rechercher dans les règlements..." 
+               class="form-control form-control-lg" />
+    </div>
+
+    <div class="filters mb-3">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="scopeCanada" @bind="includeCanada">
+            <label class="form-check-label" for="scopeCanada">Canada</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="scopeQuebec" @bind="includeQuebec">
+            <label class="form-check-label" for="scopeQuebec">Québec</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="scopeRegional" @bind="includeRegional">
+            <label class="form-check-label" for="scopeRegional">Régional</label>
+        </div>
+    </div>
+
+    @if (includeRegional)
+    {
+        <div class="association-input mb-3">
+            <input type="text" 
+                   @bind="associationId" 
+                   placeholder="Code d'association (requis pour régional)" 
+                   class="form-control" />
+        </div>
+    }
+
+    <button @onclick="SearchAsync" class="btn btn-primary" disabled="@isSearching">
+        @if (isSearching)
+        {
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <span>Recherche en cours...</span>
+        }
+        else
+        {
+            <span>Rechercher</span>
+        }
+    </button>
+</div>
+
+@if (errorMessage != null)
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        @errorMessage
+    </div>
+}
+
+@if (results != null)
+{
+    <div class="results mt-4">
+        <h3>@results.TotalResults résultat(s) pour "@results.Query"</h3>
+        
+        @if (results.Results.Count == 0)
+        {
+            <div class="alert alert-info">
+                Aucun résultat trouvé. Essayez d'autres mots-clés.
+            </div>
+        }
+        else
+        {
+            @foreach (var hit in results.Results)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            @if (!string.IsNullOrEmpty(hit.RuleNumberText))
+                            {
+                                <span class="badge bg-primary me-2">@hit.RuleNumberText</span>
+                            }
+                            @(hit.Title ?? "Règlement")
+                        </h5>
+                        <p class="card-text">@hit.TextPreview...</p>
+                        <div class="text-muted small">
+                            <span class="me-3">📄 Pages @hit.PageStart-@hit.PageEnd</span>
+                            <span class="me-3">📚 @hit.Scope (@hit.DocType)</span>
+                            @if (!string.IsNullOrEmpty(hit.AssociationId))
+                            {
+                                <span class="me-3">🏢 @hit.AssociationId</span>
+                            }
+                            <span>⭐ Score: @hit.Score.ToString("F2")</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+
+@code {
+    private string query = "";
+    private bool includeCanada = true;
+    private bool includeQuebec = true;
+    private bool includeRegional = false;
+    private string? associationId;
+    private SearchResponse? results;
+    private string? errorMessage;
+    private bool isSearching = false;
+
+    private async Task SearchAsync()
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            errorMessage = "Veuillez entrer une requête de recherche.";
+            return;
+        }
+
+        if (includeRegional && string.IsNullOrWhiteSpace(associationId))
+        {
+            errorMessage = "Le code d'association est requis pour la recherche régionale.";
+            return;
+        }
+
+        errorMessage = null;
+        isSearching = true;
+        results = null;
+
+        try
+        {
+            var scopes = new List<string>();
+            if (includeCanada) scopes.Add("Canada");
+            if (includeQuebec) scopes.Add("Quebec");
+            if (includeRegional) scopes.Add("Regional");
+
+            if (scopes.Count == 0)
+            {
+                errorMessage = "Veuillez sélectionner au moins un niveau de règlements.";
+                return;
+            }
+
+            var request = new SearchRequest(query, null, associationId, scopes, 10);
+            var response = await Http.PostAsJsonAsync("search", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                results = await response.Content.ReadFromJsonAsync<SearchResponse>();
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                errorMessage = $"Erreur lors de la recherche: {response.StatusCode} - {error}";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Erreur: {ex.Message}";
+        }
+        finally
+        {
+            isSearching = false;
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !isSearching)
+        {
+            await SearchAsync();
+        }
+    }
+}

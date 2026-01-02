@@ -73,16 +73,26 @@ Acceptance:
 ## Milestone 2 — AI Search keyword retrieval
 Goal: index chunks and search with citations.
 
-- [ ] Define AI Search schema (JSON in repo under /infra/search/)
-- [ ] Add indexing step in worker: upsert chunks into rules-active
-- [ ] POST /api/search returns top hits with citations
-- [ ] Web page shows:
+- [x] Define AI Search schema (JSON in repo under /infra/search/)
+- [x] Add Azure.Search.Documents package to Api
+- [x] Add search DTOs to Shared/Models.cs
+- [x] Create SearchStore service with indexing and search capabilities
+- [x] Register SearchStore in Program.cs DI
+- [x] Add indexing step in worker: upsert chunks into rules-active
+- [x] POST /api/search returns top hits with citations
+- [x] GET /api/admin/search-stats returns index statistics
+- [x] POST /api/admin/search-index creates/updates index
+- [x] Web page shows:
   - query box
   - scope toggles (Canada/Quebec/Regional)
   - association selector required when Regional selected
+- [x] Update infrastructure (main.bicep) with Azure AI Search resource
 
 Acceptance:
 - 20 test questions from docs/domain.md show correct rule in top 3 most of the time
+
+Testing:
+- See [docs/testing-milestone2.md](docs/testing-milestone2.md) for comprehensive testing guide
 
 ---
 

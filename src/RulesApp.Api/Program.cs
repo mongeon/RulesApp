@@ -12,8 +12,6 @@ using RulesApp.Api.Services;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
-builder.ConfigureFunctionsWebApplication();
-
 // Azure Storage clients - prefer AzureWebJobsStorage to align all bindings (HTTP + triggers)
 var storageConnectionString =
     builder.Configuration["AzureWebJobsStorage"]
@@ -40,6 +38,19 @@ builder.Services.AddSingleton<ITableStore, TableStore>();
 // Business services
 builder.Services.AddSingleton<IPdfExtractor, PdfExtractor>();
 builder.Services.AddSingleton<IChunker, Chunker>();
+
+// Azure AI Search
+var searchEndpoint = builder.Configuration["Search:Endpoint"]
+    ?? Environment.GetEnvironmentVariable("Search:Endpoint")
+    ?? throw new InvalidOperationException("Search:Endpoint not configured");
+var searchAdminKey = builder.Configuration["Search:AdminKey"]
+    ?? Environment.GetEnvironmentVariable("Search:AdminKey")
+    ?? throw new InvalidOperationException("Search:AdminKey not configured");
+var searchIndexName = builder.Configuration["Search:IndexName"]
+    ?? Environment.GetEnvironmentVariable("Search:IndexName")
+    ?? "rules-active";
+
+builder.Services.AddSingleton<ISearchStore>(new SearchStore(searchEndpoint, searchAdminKey, searchIndexName));
 
 // Worker (for manual invocation testing)
 builder.Services.AddSingleton<RulesIngestWorker>();

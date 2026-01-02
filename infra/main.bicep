@@ -106,6 +106,25 @@ resource tablesDefinition 'Microsoft.Storage/storageAccounts/tableServices/table
   properties: {}
 }]
 
+// Azure AI Search Service
+resource searchService 'Microsoft.Search/searchServices@2023-11-01' = {
+  name: '${appName}-search-${environmentName}-${uniqueString(resourceGroup().id)}'
+  location: location
+  sku: {
+    name: environmentName == 'prod' ? 'standard' : 'basic'
+  }
+  properties: {
+    replicaCount: 1
+    partitionCount: 1
+    hostingMode: 'default'
+    publicNetworkAccess: 'enabled'
+  }
+  tags: {
+    Environment: environmentName
+    Application: 'RulesApp'
+  }
+}
+
 // Outputs
 @description('Storage account name')
 output storageAccountName string = storageAccount.name
@@ -121,3 +140,12 @@ output queueEndpoint string = storageAccount.properties.primaryEndpoints.queue
 
 @description('Storage account table endpoint')
 output tableEndpoint string = storageAccount.properties.primaryEndpoints.table
+
+@description('Search service name')
+output searchServiceName string = searchService.name
+
+@description('Search service endpoint')
+output searchEndpoint string = 'https://${searchService.name}.search.windows.net'
+
+@description('Search service admin key')
+output searchAdminKey string = searchService.listAdminKeys().primaryKey
