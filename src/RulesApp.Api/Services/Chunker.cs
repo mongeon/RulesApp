@@ -21,13 +21,15 @@ public class Chunker : IChunker
     // 1. Standard: "1.04 THE PLAYING FIELD" or "Règle 1.04"
     // 2. Quebec format: "34 55.7 - REFUS DE QUITTER" (page number, then rule number, then dash)
     // 3. With subsections: "5.09(a)" or "105.2.1"
+    // 4. French regional: "2.3. Annulation et remise de partie" (number, period, space, title)
+    // Matches at: start of string, after newline, OR after whitespace
     private static readonly Regex RuleNumberPattern = new(
-        @"(?:^|\n)\s*(?:\d+\s+)?(?:R[èe]gle\s+)?(\d+\.\d+(?:\.\d+)?(?:\s*\([a-z]\))?)\s*(?:-|[A-ZÀÂÇÉÈÊËÎÏÔÛÙÜŸŒÆ])", 
+        @"(?:^|\n|\s)(?:\d+\s+)?(?:R[èe]gle\s+)?(\d+\.\d+(?:\.\d+)?(?:\s*\([a-z]\))?)\s*(?:-|\.?\s+[A-ZÀÂÇÉÈÊËÎÏÔÛÙÜŸŒÆ])", 
         RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
     
-    private const int MaxChunkSize = 2000;  // Increased to avoid aggressive truncation
+    private const int MaxChunkSize = 4000;   // Allow larger chunks to preserve rule context
     private const int MinChunkSize = 200;
-    private const int TargetChunkSize = 1200;  // Sweet spot for search relevance
+    private const int TargetChunkSize = 2500; // Higher target = fewer splits, better rule completeness
     
     public List<RuleChunkDto> ChunkPages(
         List<PageDto> pages,
@@ -63,33 +65,66 @@ public class Chunker : IChunker
             if (section.text.Length < MinChunkSize)
                 continue;
             
-            // Try to detect rule number
+            // Try to detect rule number from the ORIGINAL section
+            // This rule number will be propagated to ALL sub-chunks if splitting occurs
             var ruleMatch = RuleNumberPattern.Match(section.text);
             string? ruleNumberText = ruleMatch.Success ? ruleMatch.Groups[1].Value : null;
-            
-            // RuleKey should preserve the rule number as-is for matching across scopes
             string? ruleKey = ruleNumberText?.Trim();
             
-            // Extract title (first line or sentence)
+            // Extract title from ORIGINAL section (will be propagated to all sub-chunks)
+            // This ensures all fragments of a split rule share the same title
             var title = ExtractTitle(section.text);
             
-            // Generate deterministic chunk ID
-            var chunkId = GenerateChunkId(seasonId, associationId, docType, section.pageStart, section.text);
+            var trimmed = section.text.Trim();
             
-            chunks.Add(new RuleChunkDto(
-                ChunkId: chunkId,
-                ScopeLevel: scopeLevel,
-                AssociationId: associationId,
-                Rulebook: rulebook,
-                Language: language,
-                RuleNumberText: ruleNumberText,
-                RuleKey: ruleKey,
-                Title: title,
-                PageStart: section.pageStart,
-                PageEnd: section.pageEnd,
-                PdfPath: pdfPath,
-                Text: section.text
-            ));
+            // If section is too large, split at sentence boundaries but PROPAGATE rule number
+            if (trimmed.Length > MaxChunkSize)
+            {
+                var subSections = SplitAtSentenceBoundaries(trimmed, MaxChunkSize);
+                foreach (var subSection in subSections)
+                {
+                    if (subSection.Length >= MinChunkSize)
+                    {
+                        // Generate deterministic chunk ID (includes sub-section text for uniqueness)
+                        var chunkId = GenerateChunkId(seasonId, associationId, docType, section.pageStart, subSection);
+                        
+                        chunks.Add(new RuleChunkDto(
+                            ChunkId: chunkId,
+                            ScopeLevel: scopeLevel,
+                            AssociationId: associationId,
+                            Rulebook: rulebook,
+                            Language: language,
+                            RuleNumberText: ruleNumberText,    // PROPAGATED from original section
+                            RuleKey: ruleKey,                   // PROPAGATED from original section
+                            Title: title,                       // Same title for all sub-chunks of same rule
+                            PageStart: section.pageStart,
+                            PageEnd: section.pageEnd,
+                            PdfPath: pdfPath,
+                            Text: subSection
+                        ));
+                    }
+                }
+            }
+            else
+            {
+                // Single chunk (no splitting needed)
+                var chunkId = GenerateChunkId(seasonId, associationId, docType, section.pageStart, section.text);
+                
+                chunks.Add(new RuleChunkDto(
+                    ChunkId: chunkId,
+                    ScopeLevel: scopeLevel,
+                    AssociationId: associationId,
+                    Rulebook: rulebook,
+                    Language: language,
+                    RuleNumberText: ruleNumberText,
+                    RuleKey: ruleKey,
+                    Title: title,
+                    PageStart: section.pageStart,
+                    PageEnd: section.pageEnd,
+                    PdfPath: pdfPath,
+                    Text: section.text
+                ));
+            }
         }
         
         return chunks;

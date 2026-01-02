@@ -125,6 +125,7 @@ public record SearchHit(
     string? AssociationId,
     int PageStart,
     int PageEnd,
+    string Text,
     string TextPreview,
     double Score
 );

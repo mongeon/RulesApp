@@ -53,7 +53,7 @@ public class ChatService : IChatService
             SeasonId: request.SeasonId,
             AssociationId: request.AssociationId,
             Scopes: scopes,
-            Top: 15 // Retrieve top candidates for precision
+            Top: 50 // Retrieve more candidates to ensure we get all chunks of selected rules
         );
 
         var searchResults = await _searchStore.SearchAsync(searchRequest, cancellationToken);
@@ -95,26 +95,64 @@ public class ChatService : IChatService
             request.AssociationId
         );
 
-        // 3. Select top contexts (primary chunks from each rule group + ungrouped)
+        // Sort precedence groups by primary chunk scope priority: Regional > Quebec > Canada
+        // This ensures higher-precedence rules are selected first when building context
+        var scopePriority = new Dictionary<string, int>
+        {
+            { "Regional", 3 },
+            { "Quebec", 2 },
+            { "Canada", 1 }
+        };
+        
+        var sortedGroups = precedenceGroups
+            .OrderByDescending(g => scopePriority.GetValueOrDefault(g.PrimaryChunk.Scope, 0))
+            .ThenByDescending(g => g.PrimaryChunk.Score)  // Within same scope level, prefer higher scores
+            .ToList();
+
+        // 3. Select top contexts (primary chunks from each rule group + all chunks for that rule + ungrouped)
         var contextChunks = new List<SearchHit>();
         
-        // Add primary chunks from rule groups (respecting precedence)
-        foreach (var group in precedenceGroups.Take(request.MaxContext))
+        // Add primary chunks from rule groups (respecting precedence and sorted by scope priority)
+        int groupIndex = 0;
+        foreach (var group in sortedGroups.Take(request.MaxContext))
         {
             contextChunks.Add(group.PrimaryChunk);
+            groupIndex++;
         }
         
-        // Fill remaining slots with results that weren't grouped
-        var remainingSlots = request.MaxContext - contextChunks.Count;
+        // For each selected rule, fetch ALL chunks with that RuleKey AND SAME SCOPE
+        // This ensures we get complete context while respecting precedence (Regional > Quebec > Canada)
+        foreach (var group in sortedGroups.Take(request.MaxContext))
+        {
+            var ruleKey = group.RuleKey;
+            if (string.IsNullOrEmpty(ruleKey))
+                continue;
+            
+            var primaryScope = group.PrimaryChunk.Scope;  // Use the scope of the primary (highest precedence) chunk
+            var allChunksForRule = await _searchStore.GetChunksByRuleKeyAndScopeAsync(
+                ruleKey,
+                primaryScope,
+                request.SeasonId ?? "2025",
+                request.AssociationId,
+                cancellationToken
+            );
+            
+            // Add all chunks that aren't already in context
+            var existingChunkIds = contextChunks.Select(c => c.ChunkId).ToHashSet();
+            foreach (var chunk in allChunksForRule.Where(c => !existingChunkIds.Contains(c.ChunkId)))
+            {
+                contextChunks.Add(chunk);
+            }
+        }
+        
+        // Fill remaining slots with ungrouped results that have high relevance
+        var groupedChunkIds = new HashSet<string>(contextChunks.Select(c => c.ChunkId));
+        var remainingSlots = Math.Max(0, request.MaxContext * 3 - contextChunks.Count);  // Allow room for rule completeness
         if (remainingSlots > 0)
         {
-            var groupedChunkIds = precedenceGroups
-                .SelectMany(g => new[] { g.PrimaryChunk.ChunkId }.Concat(g.AlternateChunks.Select(c => c.ChunkId)))
-                .ToHashSet();
-            
             var ungrouped = relevantResults
                 .Where(h => !groupedChunkIds.Contains(h.ChunkId))
-                .OrderByDescending(h => h.Score) // Prioritize higher-scoring ungrouped results
+                .OrderByDescending(h => h.Score)
                 .Take(remainingSlots);
             
             contextChunks.AddRange(ungrouped);
@@ -213,7 +251,7 @@ public class ChatService : IChatService
             var ruleId = chunk.RuleNumberText ?? chunk.RuleKey ?? "N/A";
             var relevanceIndicator = i == 0 ? "[MOST RELEVANT]" : i < 3 ? "[HIGH RELEVANCE]" : "[REFERENCE]";
             contextBuilder.AppendLine($"{relevanceIndicator} Rule {ruleId} ({chunk.Scope}, Page {chunk.PageStart}, Score: {chunk.Score:F2}):");
-            contextBuilder.AppendLine(chunk.TextPreview);
+            contextBuilder.AppendLine(chunk.Text);
             contextBuilder.AppendLine();
         }
 
