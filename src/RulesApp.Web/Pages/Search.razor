@@ -257,7 +257,7 @@
             }
 
             var associationId = string.IsNullOrWhiteSpace(selectedAssociation) ? null : selectedAssociation;
-            var request = new SearchRequest(query, null, associationId, scopes, 10, LanguageState.Current);
+            var request = new SearchRequest(query, null, associationId, scopes, 10);
             var response = await Http.PostAsJsonAsync("api/search", request);
 
             if (response.IsSuccessStatusCode)

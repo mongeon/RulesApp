@@ -40,8 +40,6 @@ public class ChatService : IChatService
 
     public async Task<ChatResponse> ProcessQueryAsync(ChatRequest request, CancellationToken cancellationToken = default)
     {
-        var answerLanguage = request.Language?.Trim().ToUpperInvariant() ?? "FR";
-
         // 1. Retrieve candidates from search
         // Build scope list: always include Canada and Quebec; include Regional if association is provided
         var scopes = new List<string> { "Canada", "Quebec" };
@@ -55,8 +53,7 @@ public class ChatService : IChatService
             SeasonId: request.SeasonId,
             AssociationId: request.AssociationId,
             Scopes: scopes,
-            Top: 50, // Retrieve more candidates to ensure we get all chunks of selected rules
-            Language: answerLanguage
+            Top: 50 // Retrieve more candidates to ensure we get all chunks of selected rules
         );
 
         var searchResults = await _searchStore.SearchAsync(searchRequest, cancellationToken);
@@ -177,11 +174,11 @@ public class ChatService : IChatService
         string answer;
         if (request.UseAI && _httpClient != null && !string.IsNullOrEmpty(_openAiEndpoint))
         {
-            answer = await GenerateAIAnswerAsync(request.Query, contextChunks, answerLanguage, cancellationToken);
+            answer = await GenerateAIAnswerAsync(request.Query, contextChunks, cancellationToken);
         }
         else
         {
-            answer = GenerateDirectAnswer(contextChunks, answerLanguage);
+            answer = GenerateDirectAnswer(contextChunks);
         }
 
         // 5. Build citations
@@ -217,19 +214,17 @@ public class ChatService : IChatService
         );
     }
 
-    private string GenerateDirectAnswer(List<SearchHit> contextChunks, string language)
+    private string GenerateDirectAnswer(List<SearchHit> contextChunks)
     {
         var sb = new StringBuilder();
-        var heading = language == "EN" ? "Based on the rulebook context:" : "Selon le contexte du règlement:";
-        sb.AppendLine(heading);
+        sb.AppendLine("Based on the rulebook context:");
         sb.AppendLine();
 
         foreach (var chunk in contextChunks)
         {
             var ruleId = chunk.RuleNumberText ?? chunk.RuleKey ?? "N/A";
-            var title = chunk.Title ?? (language == "EN" ? "Untitled" : "Sans titre");
-            var pageLabel = language == "EN" ? "Page" : "Page"; // Same label for simplicity
-            sb.AppendLine($"**{ruleId} - {title}** ({chunk.Scope}, {pageLabel} {chunk.PageStart})");
+            var title = chunk.Title ?? "Untitled";
+            sb.AppendLine($"**{ruleId} - {title}** ({chunk.Scope}, Page {chunk.PageStart})");
             sb.AppendLine(chunk.TextPreview);
             sb.AppendLine();
         }
@@ -240,12 +235,11 @@ public class ChatService : IChatService
     private async Task<string> GenerateAIAnswerAsync(
         string query,
         List<SearchHit> contextChunks,
-        string language,
         CancellationToken cancellationToken)
     {
         if (_httpClient == null || string.IsNullOrEmpty(_openAiEndpoint) || string.IsNullOrEmpty(_openAiDeploymentName))
         {
-            return GenerateDirectAnswer(contextChunks, language);
+            return GenerateDirectAnswer(contextChunks);
         }
 
         // Build context string with relevance indicators
@@ -261,19 +255,17 @@ public class ChatService : IChatService
             contextBuilder.AppendLine();
         }
 
-        var languageInstruction = language == "EN" ? "Answer in English." : "Réponds en français.";
-
         // Build prompt with better instructions
-        var systemPrompt = $@"You are a baseball rules assistant. Answer questions strictly based on the provided rule context.
-    CRITICAL REQUIREMENTS:
-    1. PRIORITIZE rules marked as [MOST RELEVANT] and [HIGH RELEVANCE] - these are the best matches for the user's question
-    2. Only use information from the provided context
-    3. Always cite rule numbers and page numbers
-    4. If the context doesn't contain enough information, say so
-    5. Never invent or assume rules
-    6. {languageInstruction}
-    7. Be concise but complete
-    8. Focus on the most relevant rules rather than mentioning all provided rules";
+        var systemPrompt = @"You are a baseball rules assistant. Answer questions strictly based on the provided rule context.
+CRITICAL REQUIREMENTS:
+1. PRIORITIZE rules marked as [MOST RELEVANT] and [HIGH RELEVANCE] - these are the best matches for the user's question
+2. Only use information from the provided context
+3. Always cite rule numbers and page numbers
+4. If the context doesn't contain enough information, say so
+5. Never invent or assume rules
+6. Answer in the same language as the question
+7. Be concise but complete
+8. Focus on the most relevant rules rather than mentioning all provided rules";
 
         var userPrompt = $@"Context from official rulebooks (ordered by relevance):
 {contextBuilder}
@@ -305,7 +297,7 @@ Answer the question based ONLY on the context above, PRIORITIZING the most relev
             if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine($"[WARNING] OpenAI API error: {response.StatusCode}");
-                return GenerateDirectAnswer(contextChunks, language);
+                return GenerateDirectAnswer(contextChunks);
             }
 
             var responseJson = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -316,15 +308,15 @@ Answer the question based ONLY on the context above, PRIORITIZING the most relev
                 choices[0].TryGetProperty("message", out var message) &&
                 message.TryGetProperty("content", out var aiContent))
             {
-                return aiContent.GetString() ?? GenerateDirectAnswer(contextChunks, language);
+                return aiContent.GetString() ?? GenerateDirectAnswer(contextChunks);
             }
 
-            return GenerateDirectAnswer(contextChunks, language);
+            return GenerateDirectAnswer(contextChunks);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"[ERROR] Failed to generate AI answer: {ex.Message}");
-            return GenerateDirectAnswer(contextChunks, language);
+            return GenerateDirectAnswer(contextChunks);
         }
     }
 

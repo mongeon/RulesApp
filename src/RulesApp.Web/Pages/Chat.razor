@@ -214,7 +214,7 @@
                 SeasonId: string.IsNullOrWhiteSpace(seasonId) ? null : seasonId,
                 AssociationId: string.IsNullOrWhiteSpace(selectedAssociation) ? null : selectedAssociation,
                 MaxContext: 5,
-                UseAI: true // AI-enhanced mode with OpenAI
+                UseAI: true  // AI-enhanced mode with OpenAI
             );
 
             var httpResponse = await Http.PostAsJsonAsync("api/chat", request);

@@ -92,8 +92,7 @@ public record SearchRequest(
     string? SeasonId = null,
     string? AssociationId = null,
     List<string>? Scopes = null, // "Canada", "Quebec", "Regional"
-    int Top = 10,
-    string? Language = null // "FR" or "EN"
+    int Top = 10
 );
 
 public record SearchResponse(
