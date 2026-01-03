@@ -1,10 +1,12 @@
 @page "/search"
 @using RulesApp.Shared
 @inject HttpClient Http
+@inject LanguageState LanguageState
+@implements IDisposable
 
-<PageTitle>Recherche - RulesApp</PageTitle>
+<PageTitle>@L("Recherche - RulesApp", "Search - RulesApp")</PageTitle>
 
-<h1>Recherche de règlements</h1>
+<h1>@L("Recherche de règlements", "Rule search")</h1>
 
 <div class="search-container">
     <div class="search-box mb-3">
@@ -12,7 +14,7 @@
                @bind="query" 
                @bind:event="oninput"
                @onkeypress="HandleKeyPress"
-               placeholder="Rechercher dans les règlements..." 
+               placeholder="@L("Rechercher dans les règlements...", "Search the rulebooks...")" 
                class="form-control form-control-lg" />
     </div>
 
@@ -23,21 +25,37 @@
         </div>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="scopeQuebec" @bind="includeQuebec">
-            <label class="form-check-label" for="scopeQuebec">Québec</label>
+            <label class="form-check-label" for="scopeQuebec">@L("Québec", "Quebec")</label>
         </div>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" id="scopeRegional" @bind="includeRegional">
-            <label class="form-check-label" for="scopeRegional">Régional</label>
+            <label class="form-check-label" for="scopeRegional">@L("Régional", "Regional")</label>
         </div>
     </div>
 
     @if (includeRegional)
     {
         <div class="association-input mb-3">
-            <input type="text" 
-                   @bind="associationId" 
-                   placeholder="Code d'association (requis pour régional)" 
-                   class="form-control" />
+            <label for="associationSelect" class="form-label">@L("Association (régional)", "Association (regional)")</label>
+            <select id="associationSelect" class="form-select" @bind="selectedAssociation" disabled="@isLoadingAssociations">
+                <option value="">@L("-- Sélectionner une association --", "-- Select an association --")</option>
+                @foreach (var option in associationOptions)
+                {
+                    <option value="@option">@option</option>
+                }
+            </select>
+            @if (isLoadingAssociations)
+            {
+                <small class="form-text text-muted">@L("Chargement des associations...", "Loading associations...")</small>
+            }
+            else if (associationsLoadFailed)
+            {
+                <small class="form-text text-danger">@L("Impossible de charger les associations. Réessayez plus tard.", "Unable to load associations. Please try again later.")</small>
+            }
+            else
+            {
+                <small class="form-text text-muted">@L("Requis pour les règles régionales", "Required for regional rules")</small>
+            }
         </div>
     }
 
@@ -45,11 +63,11 @@
         @if (isSearching)
         {
             <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            <span>Recherche en cours...</span>
+            <span>@L("Recherche en cours...", "Searching...")</span>
         }
         else
         {
-            <span>Rechercher</span>
+            <span>@L("Rechercher", "Search")</span>
         }
     </button>
 </div>
@@ -64,13 +82,13 @@
 @if (results != null)
 {
     <div class="results mt-4">
-        <h3>@results.TotalResults résultat(s) pour "@results.Query"</h3>
+        <h3>@results.TotalResults @L("résultat(s) pour", "result(s) for") "@results.Query"</h3>
         
         @if ((results.RuleGroups == null || results.RuleGroups.Count == 0) && 
              (results.UngroupedResults == null || results.UngroupedResults.Count == 0))
         {
             <div class="alert alert-info">
-                Aucun résultat trouvé. Essayez d'autres mots-clés.
+                @L("Aucun résultat trouvé. Essayez d'autres mots-clés.", "No results found. Try different keywords.")
             </div>
         }
         else
@@ -89,12 +107,12 @@
                                         <span class="badge bg-primary me-2">@group.PrimaryChunk.RuleNumberText</span>
                                     }
                                     @(group.PrimaryChunk.Title ?? "Règlement")
-                                    <span class="badge bg-success ms-2">Règle principale</span>
+                                    <span class="badge bg-success ms-2">@L("Règle principale", "Primary rule")</span>
                                 </h5>
                             </div>
                             <p class="card-text">@group.PrimaryChunk.TextPreview...</p>
                             <div class="text-muted small">
-                                <span class="me-3">📄 Pages @group.PrimaryChunk.PageStart-@group.PrimaryChunk.PageEnd</span>
+                                <span class="me-3">📄 @L("Pages", "Pages") @group.PrimaryChunk.PageStart-@group.PrimaryChunk.PageEnd</span>
                                 <span class="me-3">📚 @group.PrimaryChunk.Scope (@group.PrimaryChunk.DocType)</span>
                                 @if (!string.IsNullOrEmpty(group.PrimaryChunk.AssociationId))
                                 {
@@ -107,14 +125,14 @@
                             @if (group.AlternateChunks != null && group.AlternateChunks.Count > 0)
                             {
                                 <div class="mt-3">
-                                    <h6 class="text-muted">Versions alternatives (@group.AlternateChunks.Count):</h6>
+                                    <h6 class="text-muted">@L("Versions alternatives", "Alternate versions") (@group.AlternateChunks.Count):</h6>
                                     @foreach (var alt in group.AlternateChunks)
                                     {
                                         <div class="card border-secondary mt-2">
                                             <div class="card-body py-2">
                                                 <div class="text-muted small">
                                                     <span class="me-3">📚 @alt.Scope (@alt.DocType)</span>
-                                                    <span class="me-3">📄 Pages @alt.PageStart-@alt.PageEnd</span>
+                                                    <span class="me-3">📄 @L("Pages", "Pages") @alt.PageStart-@alt.PageEnd</span>
                                                     @if (!string.IsNullOrEmpty(alt.AssociationId))
                                                     {
                                                         <span class="me-3">🏢 @alt.AssociationId</span>
@@ -143,11 +161,11 @@
                                 {
                                     <span class="badge bg-secondary me-2">@hit.RuleNumberText</span>
                                 }
-                                @(hit.Title ?? "Règlement")
+                                @(hit.Title ?? L("Règlement", "Rule"))
                             </h5>
                             <p class="card-text">@hit.TextPreview...</p>
                             <div class="text-muted small">
-                                <span class="me-3">📄 Pages @hit.PageStart-@hit.PageEnd</span>
+                                <span class="me-3">📄 @L("Pages", "Pages") @hit.PageStart-@hit.PageEnd</span>
                                 <span class="me-3">📚 @hit.Scope (@hit.DocType)</span>
                                 @if (!string.IsNullOrEmpty(hit.AssociationId))
                                 {
@@ -168,22 +186,56 @@
     private bool includeCanada = true;
     private bool includeQuebec = true;
     private bool includeRegional = false;
-    private string? associationId;
+    private List<string> associationOptions = new();
+    private bool isLoadingAssociations = true;
+    private bool associationsLoadFailed = false;
+    private string selectedAssociation = "";
     private SearchResponseWithPrecedence? results;
     private string? errorMessage;
     private bool isSearching = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        LanguageState.OnChange += HandleLanguageChanged;
+        await LoadAssociationsAsync();
+    }
+
+    private async Task LoadAssociationsAsync()
+    {
+        try
+        {
+            isLoadingAssociations = true;
+            associationsLoadFailed = false;
+            var response = await Http.GetFromJsonAsync<AssociationListResponse>("api/associations");
+            associationOptions = response?.Associations ?? new List<string>();
+        }
+        catch
+        {
+            associationsLoadFailed = true;
+            associationOptions = new List<string>();
+        }
+        finally
+        {
+            isLoadingAssociations = false;
+        }
+    }
+
+    private void HandleLanguageChanged()
+    {
+        StateHasChanged();
+    }
 
     private async Task SearchAsync()
     {
         if (string.IsNullOrWhiteSpace(query))
         {
-            errorMessage = "Veuillez entrer une requête de recherche.";
+            errorMessage = L("Veuillez entrer une requête de recherche.", "Please enter a search query.");
             return;
         }
 
-        if (includeRegional && string.IsNullOrWhiteSpace(associationId))
+        if (includeRegional && string.IsNullOrWhiteSpace(selectedAssociation))
         {
-            errorMessage = "Le code d'association est requis pour la recherche régionale.";
+            errorMessage = L("Le code d'association est requis pour la recherche régionale.", "Association code is required for regional search.");
             return;
         }
 
@@ -200,11 +252,12 @@
 
             if (scopes.Count == 0)
             {
-                errorMessage = "Veuillez sélectionner au moins un niveau de règlements.";
+                errorMessage = L("Veuillez sélectionner au moins un niveau de règlements.", "Select at least one scope.");
                 return;
             }
 
-            var request = new SearchRequest(query, null, associationId, scopes, 10);
+            var associationId = string.IsNullOrWhiteSpace(selectedAssociation) ? null : selectedAssociation;
+            var request = new SearchRequest(query, null, associationId, scopes, 10, LanguageState.Current);
             var response = await Http.PostAsJsonAsync("api/search", request);
 
             if (response.IsSuccessStatusCode)
@@ -214,12 +267,12 @@
             else
             {
                 var error = await response.Content.ReadAsStringAsync();
-                errorMessage = $"Erreur lors de la recherche: {response.StatusCode} - {error}";
+                errorMessage = L($"Erreur lors de la recherche: {response.StatusCode} - {error}", $"Search error: {response.StatusCode} - {error}");
             }
         }
         catch (Exception ex)
         {
-            errorMessage = $"Erreur: {ex.Message}";
+            errorMessage = L($"Erreur: {ex.Message}", $"Error: {ex.Message}");
         }
         finally
         {
@@ -233,5 +286,13 @@
         {
             await SearchAsync();
         }
+    }
+
+    private bool IsEnglish => LanguageState.Current == "EN";
+    private string L(string fr, string en) => IsEnglish ? en : fr;
+
+    public void Dispose()
+    {
+        LanguageState.OnChange -= HandleLanguageChanged;
     }
 }

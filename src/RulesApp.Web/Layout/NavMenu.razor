@@ -1,9 +1,15 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">RulesApp.Web</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+﻿@inject LanguageState LanguageState
+@implements IDisposable
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+        <a class="navbar-brand" href="">RulesApp</a>
+        <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-sm btn-outline-light" @onclick="ToggleLanguage">@CurrentLanguageLabel</button>
+            <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -11,17 +17,17 @@
     <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> @L("Accueil", "Home")
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="search">
-                <span class="bi bi-search-nav-menu" aria-hidden="true"></span> Recherche
+                <span class="bi bi-search-nav-menu" aria-hidden="true"></span> @L("Recherche", "Search")
             </NavLink>
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="chat">
-                <span class="bi bi-chat-dots-nav-menu" aria-hidden="true"></span> Assistant
+                <span class="bi bi-chat-dots-nav-menu" aria-hidden="true"></span> @L("Assistant", "Assistant")
             </NavLink>
         </div>
     </nav>
@@ -30,10 +36,36 @@
 @code {
     private bool collapseNavMenu = true;
 
+    private string CurrentLanguageLabel => LanguageState.Current == "EN" ? "EN" : "FR";
+    private bool IsEnglish => LanguageState.Current == "EN";
+
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private string L(string fr, string en) => IsEnglish ? en : fr;
+
+    private void ToggleLanguage()
+    {
+        var next = IsEnglish ? "FR" : "EN";
+        LanguageState.SetLanguage(next);
+    }
+
+    protected override void OnInitialized()
+    {
+        LanguageState.OnChange += HandleLanguageChanged;
+    }
+
+    private void HandleLanguageChanged()
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        LanguageState.OnChange -= HandleLanguageChanged;
     }
 }

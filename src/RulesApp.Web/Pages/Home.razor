@@ -1,7 +1,29 @@
 ﻿@page "/"
+@inject LanguageState LanguageState
+@implements IDisposable
 
-<PageTitle>Home</PageTitle>
+<PageTitle>@L("Accueil", "Home")</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>@L("Bonjour!", "Hello!")</h1>
 
-Welcome to your new app.
+<p>@L("Bienvenue dans votre nouvelle application.", "Welcome to your new app.")</p>
+
+@code {
+	protected override void OnInitialized()
+	{
+		LanguageState.OnChange += HandleLanguageChanged;
+	}
+
+	private void HandleLanguageChanged()
+	{
+		StateHasChanged();
+	}
+
+	private bool IsEnglish => LanguageState.Current == "EN";
+	private string L(string fr, string en) => IsEnglish ? en : fr;
+
+	public void Dispose()
+	{
+		LanguageState.OnChange -= HandleLanguageChanged;
+	}
+}

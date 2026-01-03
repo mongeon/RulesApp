@@ -10,4 +10,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 var apiBaseAddress = builder.Configuration["ApiBaseAddress"] ?? "http://localhost:7071";
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseAddress) });
 
+// Global language state
+builder.Services.AddScoped<LanguageState>();
+
 await builder.Build().RunAsync();

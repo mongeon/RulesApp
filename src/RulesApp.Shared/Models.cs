@@ -92,7 +92,8 @@ public record SearchRequest(
     string? SeasonId = null,
     string? AssociationId = null,
     List<string>? Scopes = null, // "Canada", "Quebec", "Regional"
-    int Top = 10
+    int Top = 10,
+    string? Language = null // "FR" or "EN"
 );
 
 public record SearchResponse(
@@ -204,5 +205,11 @@ public record ChatCitation(
     int PageStart,
     int PageEnd,
     string TextPreview
+);
+
+// Associations
+public record AssociationListResponse(
+    string SeasonId,
+    List<string> Associations
 );
 

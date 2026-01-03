@@ -1,42 +1,58 @@
 @page "/chat"
 @using RulesApp.Shared
 @inject HttpClient Http
+@inject LanguageState LanguageState
+@implements IDisposable
 
-<PageTitle>Assistant - RulesApp</PageTitle>
+<PageTitle>@L("Assistant - RulesApp", "Assistant - RulesApp")</PageTitle>
 
-<h1>Assistant de règlements</h1>
-<p class="lead">Posez vos questions sur les règlements de baseball</p>
+<h1>@L("Assistant de règlements", "Rules assistant")</h1>
+<p class="lead">@L("Posez vos questions sur les règlements de baseball", "Ask your baseball rules questions")</p>
 
 <div class="chat-container">
     <div class="mb-3">
         <textarea @bind="query" 
-                  @bind:event="oninput"
-                  @onkeypress="HandleKeyPress"
-                  rows="3"
-                  placeholder="Ex: Combien de joueurs dans une équipe? Quelle est la durée d'un match?" 
-                  class="form-control form-control-lg">
+              @bind:event="oninput"
+              @onkeypress="HandleKeyPress"
+              rows="3"
+              placeholder="@L("Ex: Combien de joueurs dans une équipe? Quelle est la durée d'un match?", "e.g. How many players per team? What is the game duration?")" 
+              class="form-control form-control-lg">
         </textarea>
-        <small class="form-text text-muted">Maximum 500 caractères</small>
+        <small class="form-text text-muted">@L("Maximum 500 caractères", "Maximum 500 characters")</small>
     </div>
 
     <div class="filters mb-3">
-        <div class="row">
-            <div class="col-md-6">
-                <label for="seasonSelect" class="form-label">Saison</label>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="seasonSelect" class="form-label">@L("Saison", "Season")</label>
                 <input type="text" 
                        id="seasonSelect"
-                       @bind="seasonId" 
+                      @bind="seasonId"
+                      @bind:after="OnSeasonChanged"
                        placeholder="2025" 
                        class="form-control" />
             </div>
-            <div class="col-md-6">
-                <label for="associationInput" class="form-label">Association (optionnel)</label>
-                <input type="text" 
-                       id="associationInput"
-                       @bind="associationId" 
-                       placeholder="Ex: LBML" 
-                       class="form-control" />
-                <small class="form-text text-muted">Pour les règles régionales spécifiques</small>
+            <div class="col-md-4">
+                <label for="associationSelect" class="form-label">@L("Association (optionnel)", "Association (optional)")</label>
+                <select id="associationSelect" class="form-select" @bind="selectedAssociation" disabled="@isLoadingAssociations">
+                    <option value="">@L("-- Aucune association --", "-- No association --")</option>
+                    @foreach (var option in associationOptions)
+                    {
+                        <option value="@option">@option</option>
+                    }
+                </select>
+                @if (isLoadingAssociations)
+                {
+                    <small class="form-text text-muted">@L("Chargement des associations...", "Loading associations...")</small>
+                }
+                else if (associationsLoadFailed)
+                {
+                    <small class="form-text text-danger">@L("Impossible de charger les associations.", "Unable to load associations.")</small>
+                }
+                else
+                {
+                    <small class="form-text text-muted">@L("Pour les règles régionales spécifiques", "For regional-specific rules")</small>
+                }
             </div>
         </div>
     </div>
@@ -45,11 +61,11 @@
         @if (isAsking)
         {
             <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            <span>Recherche en cours...</span>
+            <span>@L("Recherche en cours...", "Searching...")</span>
         }
         else
         {
-            <span>🤔 Poser la question</span>
+            <span>@L("🤔 Poser la question", "🤔 Ask the question")</span>
         }
     </button>
 </div>
@@ -57,7 +73,7 @@
 @if (errorMessage != null)
 {
     <div class="alert alert-danger mt-4" role="alert">
-        <strong>Erreur:</strong> @errorMessage
+        <strong>@L("Erreur:", "Error:")</strong> @errorMessage
     </div>
 }
 
@@ -67,17 +83,17 @@
         @if (response.Status == "not_found")
         {
             <div class="alert alert-warning" role="alert">
-                <h5 class="alert-heading">❌ Aucune règle trouvée</h5>
-                <p>Aucune règle pertinente n'a été trouvée dans les règlements pour votre question.</p>
+                <h5 class="alert-heading">@L("❌ Aucune règle trouvée", "❌ No rule found")</h5>
+                <p>@L("Aucune règle pertinente n'a été trouvée dans les règlements pour votre question.", "No relevant rules were found for your question.")</p>
                 <hr>
-                <p class="mb-0">Essayez de reformuler votre question ou utilisez des mots-clés différents.</p>
+                <p class="mb-0">@L("Essayez de reformuler votre question ou utilisez des mots-clés différents.", "Try rephrasing or using different keywords.")</p>
             </div>
         }
         else
         {
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">✅ Réponse basée sur les règlements</h5>
+                    <h5 class="mb-0">@L("✅ Réponse basée sur les règlements", "✅ Answer based on the rules")</h5>
                 </div>
                 <div class="card-body">
                     <div class="answer-text mb-4">
@@ -87,7 +103,7 @@
                     @if (response.Citations.Count > 0)
                     {
                         <div class="citations">
-                            <h6 class="border-bottom pb-2">📚 Références (@response.Citations.Count)</h6>
+                            <h6 class="border-bottom pb-2">📚 @L("Références", "References") (@response.Citations.Count)</h6>
                             @foreach (var citation in response.Citations)
                             {
                                 <div class="citation-card card mb-2">
@@ -96,15 +112,15 @@
                                             <div>
                                                 @if (!string.IsNullOrEmpty(citation.RuleNumberText))
                                                 {
-                                                    <span class="badge bg-primary me-2">Règle @citation.RuleNumberText</span>
+                                                    <span class="badge bg-primary me-2">@L("Règle", "Rule") @citation.RuleNumberText</span>
                                                 }
-                                                <strong>@(citation.Title ?? "Règlement")</strong>
+                                                <strong>@(citation.Title ?? L("Règlement", "Rule"))</strong>
                                             </div>
                                             <span class="badge bg-info">@citation.Scope</span>
                                         </div>
                                         <p class="small text-muted mb-2 mt-2">@citation.TextPreview...</p>
                                         <div class="citation-meta small text-muted">
-                                            <span class="me-3">📄 Pages @citation.PageStart-@citation.PageEnd</span>
+                                            <span class="me-3">📄 @L("Pages", "Pages") @citation.PageStart-@citation.PageEnd</span>
                                             <span class="me-3">📘 @citation.DocType</span>
                                             @if (!string.IsNullOrEmpty(citation.AssociationId))
                                             {
@@ -117,8 +133,8 @@
                         </div>
 
                         <div class="stats mt-3 text-muted small">
-                            <span class="me-3">✅ @response.ContextUsed règle(s) utilisée(s)</span>
-                            <span>🔍 @response.TotalRetrieved résultat(s) trouvé(s)</span>
+                            <span class="me-3">✅ @response.ContextUsed @L("règle(s) utilisée(s)", "rule(s) used")</span>
+                            <span>🔍 @response.TotalRetrieved @L("résultat(s) trouvé(s)", "result(s) found")</span>
                         </div>
                     }
                 </div>
@@ -130,10 +146,47 @@
 @code {
     private string query = "";
     private string seasonId = "2025";
-    private string? associationId = null;
+    private List<string> associationOptions = new();
+    private bool isLoadingAssociations = true;
+    private bool associationsLoadFailed = false;
+    private string selectedAssociation = "";
     private bool isAsking = false;
     private string? errorMessage = null;
     private ChatResponse? response = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        LanguageState.OnChange += HandleLanguageChanged;
+        await LoadAssociationsAsync(seasonId);
+    }
+
+    private async Task LoadAssociationsAsync(string? season)
+    {
+        try
+        {
+            isLoadingAssociations = true;
+            associationsLoadFailed = false;
+            var uri = string.IsNullOrWhiteSpace(season)
+                ? "api/associations"
+                : $"api/associations?seasonId={Uri.EscapeDataString(season)}";
+            var response = await Http.GetFromJsonAsync<AssociationListResponse>(uri);
+            associationOptions = response?.Associations ?? new List<string>();
+        }
+        catch
+        {
+            associationsLoadFailed = true;
+            associationOptions = new List<string>();
+        }
+        finally
+        {
+            isLoadingAssociations = false;
+        }
+    }
+
+    private async Task OnSeasonChanged()
+    {
+        await LoadAssociationsAsync(seasonId);
+    }
 
     private async Task AskAsync()
     {
@@ -142,13 +195,13 @@
 
         if (string.IsNullOrWhiteSpace(query))
         {
-            errorMessage = "Veuillez entrer une question.";
+            errorMessage = L("Veuillez entrer une question.", "Please enter a question.");
             return;
         }
 
         if (query.Length > 500)
         {
-            errorMessage = "La question est trop longue (maximum 500 caractères).";
+            errorMessage = L("La question est trop longue (maximum 500 caractères).", "Question is too long (max 500 characters).");
             return;
         }
 
@@ -159,9 +212,9 @@
             var request = new ChatRequest(
                 Query: query.Trim(),
                 SeasonId: string.IsNullOrWhiteSpace(seasonId) ? null : seasonId,
-                AssociationId: string.IsNullOrWhiteSpace(associationId) ? null : associationId,
+                AssociationId: string.IsNullOrWhiteSpace(selectedAssociation) ? null : selectedAssociation,
                 MaxContext: 5,
-                UseAI: true  // AI-enhanced mode with OpenAI
+                UseAI: true // AI-enhanced mode with OpenAI
             );
 
             var httpResponse = await Http.PostAsJsonAsync("api/chat", request);
@@ -173,12 +226,12 @@
             else
             {
                 var errorContent = await httpResponse.Content.ReadAsStringAsync();
-                errorMessage = $"Erreur {httpResponse.StatusCode}: {errorContent}";
+                errorMessage = L($"Erreur {httpResponse.StatusCode}: {errorContent}", $"Error {httpResponse.StatusCode}: {errorContent}");
             }
         }
         catch (Exception ex)
         {
-            errorMessage = $"Erreur lors de la requête: {ex.Message}";
+            errorMessage = L($"Erreur lors de la requête: {ex.Message}", $"Error during request: {ex.Message}");
         }
         finally
         {
@@ -192,5 +245,18 @@
         {
             await AskAsync();
         }
+    }
+
+    private void HandleLanguageChanged()
+    {
+        StateHasChanged();
+    }
+
+    private bool IsEnglish => LanguageState.Current == "EN";
+    private string L(string fr, string en) => IsEnglish ? en : fr;
+
+    public void Dispose()
+    {
+        LanguageState.OnChange -= HandleLanguageChanged;
     }
 }

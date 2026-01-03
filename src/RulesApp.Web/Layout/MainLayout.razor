@@ -1,4 +1,10 @@
 ﻿@inherits LayoutComponentBase
+@inject LanguageState LanguageState
+
+@code {
+    private bool IsEnglish => LanguageState.Current == "EN";
+    private string L(string fr, string en) => IsEnglish ? en : fr;
+}
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -6,7 +12,7 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">@L("À propos", "About")</a>
         </div>
 
         <article class="content px-4">

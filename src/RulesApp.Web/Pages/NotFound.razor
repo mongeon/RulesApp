@@ -1,5 +1,27 @@
 ﻿@page "/not-found"
 @layout MainLayout
+@inject LanguageState LanguageState
+@implements IDisposable
 
-<h3>Not Found</h3>
-<p>Sorry, the content you are looking for does not exist.</p>
+<h3>@L("Introuvable", "Not Found")</h3>
+<p>@L("Désolé, le contenu recherché n'existe pas.", "Sorry, the content you are looking for does not exist.")</p>
+
+@code {
+	protected override void OnInitialized()
+	{
+		LanguageState.OnChange += HandleLanguageChanged;
+	}
+
+	private void HandleLanguageChanged()
+	{
+		StateHasChanged();
+	}
+
+	private bool IsEnglish => LanguageState.Current == "EN";
+	private string L(string fr, string en) => IsEnglish ? en : fr;
+
+	public void Dispose()
+	{
+		LanguageState.OnChange -= HandleLanguageChanged;
+	}
+}
